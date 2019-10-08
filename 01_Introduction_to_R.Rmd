@@ -1,0 +1,143 @@
+---
+title: "Introduction to R & Data Exploration"
+author: "Mike Loranty"
+date: "10/1/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction to R
+R is a powerful set of tools for manipulating, analyzing, and visulaizing data. These tools are open source, which means that they are and always will be free to use, and they are developed by a worldwide community of users. The R programming language is at the core of these tools. Using the R language you can write commands that will tell your computer what you want it to do with your data. While this may seem a bit daunting there are a number of advantages associated with using tools like R to work with data, instead of using spreadhseet programs where you point and click, for example. In particular you can perform complex calculatations with large amounts of data very quickly, and more importanly you can save a record of your commands to make everything you do transparent and reproducable. This is very important in science! 
+
+## 1.1 Scripts
+We can use an R script to keep a record of our calculations and any other things we do with our data in R. A script is essentially a text file with a record all of our commands in it. 
+
+To make a script in RStudio click on File > New File > R Script. 
+
+By default this will open in the upper lefthand corner of RStudio, above the console. It's a good idea to save your script to your folder on the network drive before you start working. Now you can type commands in your script and have a record of what we are doing. Note that commands will not execute after you hit enter, instead your curser will just go to the next line. There are a few ways to execute commands in a script. You can press the `Run` button in the upper right of your script window, press CTRL ENTER - either of these options will execute only the line that your cursor is on. You can highlight multiple lines, and use either of these methods to execute them. Pressing the `Source` button will run every command in your script. 
+
+## 1.2 Using R to create and manipulate data
+In an R script a hashtag `#` tells R to ignore that particular line. This is called commenting, and it is useful for leaving notes for yourself and others in your script. 
+
+Let's begin to explore R using a [set of exercises adapted from the book Hands-On Programing with R.](https://rstudio-education.github.io/hopr/basics.html) This is a good resource and I encourage you to use it. 
+
+```{r, collapse = T}
+# R is just a sophisticated calculator
+1+10
+
+# we can easily create a sequence from 100 to 130
+100:130
+```
+
+Because R is a programming language, we need to learn its syntax in order for the computer to understand us. For example try entering the following two pieces of code.
+
+```{r,message=F, error=T}
+# if you enter an imcomplete command R will show '+' until you finish it
+5-
+  
+# R will give you an error message if it doesn't understand the command you've entered
+3 % 5 
+```
+
+We can create objects
+```{r,collapse = T}
+# using the assignment symbol '<-' we can create an object the computer will store in memory
+die <- 1:6
+
+# we can do all kinds of math on objects
+die - 1
+
+die/2
+
+die*die
+```
+
+## 1.3  Functions in R
+There are a wide variety of functions available to use in R. Functions generally perform some sort of mathematical operation, and can be fairly sophisticated. Functions are followed by parentheses, and you typically write and *argument* inside the parentheses. For example, imagine that we have a vector of numbers from 1 to 6, and we want to fund the mean of these numbers. It turns out there is a `mean` function, and if we supply our vector as the argument R will calculate the mean of all numbers in the vector.
+
+```{r, collapse = T}
+mean(1:6)
+
+# We can also use objectes as arguments in a function:
+mean(die)
+
+# We can also nest functions:
+round(mean(die))
+```
+
+This is convenient, but you may be asking how do I know what functions exist and what the arguments are? For that we can use the help function in R. If you know which function you want to use you can see the documentation in the help window by typing a question mark followed by the function name in the console 
+```{r}
+?round
+```
+
+## 1.4 Reading Data into R
+You can read almost any data into R, however in order to do that we need to think a little about file structure and organization on your computer. R is alway pointed to a folder or *working directory*. This is where R will look for files to read, and where it will write new files, unless you specify otherwise. To see where your working directory is you can use the `getwd()` function. 
+
+```{r, collapse=T}
+getwd()
+```
+
+From here we can use the `setwd()` function to set your working directory. This should typically be a project folder on your computer. 
+
+```{r,collapse = T, eval=F}
+# I have two lines, depending on which computer I am using
+setwd("Z:/Geog250_F19/loranty/")
+
+```
+
+Now we can work from this directory. I have a separate *data* folder within my class folder where all of my data files are stored. We can use the `read.csv()` function to read in data files that are in *csv* format. (Note that we can use the `read.table()` function to read other types of files, and there are functions to read excel files too) All of these functions require the the file name as an argument. Here we have to tell R that it is located within the *data* folder in my working directory.
+
+```{r, message = T,error = T, echo = T}
+td <- read.csv("data/thaw_depth.csv")
+```
+
+We can also specify the entire filepath as the argument.
+```{r, message = T,eval = F}
+td <- read.csv("Z:/Geog250_F19/loranty/data/thaw_depth.csv")
+```
+
+Use the help function to find out what additional arguments you might use with the `read.csv` function. 
+
+
+We can use the `head` and `tail` functions to look at the first and last few rows of this dataset, respectively. 
+```{r,message = T}
+head(td)
+
+tail(td)
+```
+
+We can use matrix notation to access data elements within an object: td[row,column] 
+```{r,message = T}
+# What is the value in the row 1 column 1
+td[1,1]
+
+# Or the values in rows 1-5 of column 5
+td[1:5,5]
+```
+
+Notice here that we have different types of data. Data in the first column is text-based, while the fifth column is numeric. It turns out our data stored as a special kind of matrix called a `dataframe`. We can get some more information about it using the `str()` function. 
+```{r, message = T}
+str(td)
+```
+
+There are a couple of important things to note here. The first is that with a data frame we can have different types of data. For example try converting our td data frame to a matrix using the `as.matrix()` function. 
+```{r, message = T, eval = F}
+as.matrix(td)
+```
+What happens when you do this? Why do you think that is? 
+
+Second, you can access variables, or columns within a data frame using the following syntax. 
+```{r, message = T}
+td$td
+```
+
+# 2 Exploratory Data Analysis
+
+Now that we're familiar with R we can begin using it to explore our own data. We'll use the `td` object that we created a moment ago. This is a data set we collected in Siberia that contains measurments of permafrost active layer thickness. 
+
+
+
+
