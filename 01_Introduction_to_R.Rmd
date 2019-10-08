@@ -123,21 +123,129 @@ Notice here that we have different types of data. Data in the first column is te
 str(td)
 ```
 
-There are a couple of important things to note here. The first is that with a data frame we can have different types of data. For example try converting our td data frame to a matrix using the `as.matrix()` function. 
+There are a couple of important things to note here. The first is that with a data frame we can have different types of data. For example try converting our td data frame to a matrix using the `as.matrix()` function. What happens when you do this? Why do you think that is? 
 ```{r, message = T, eval = F}
 as.matrix(td)
 ```
-What happens when you do this? Why do you think that is? 
+
 
 Second, you can access variables, or columns within a data frame using the following syntax. 
 ```{r, message = T}
 td$td
 ```
 
+Another handy thing that R can do is evaluate logical statements. For example, what happens when we look for thaw depths that are less than 50?  
+```{r, message = T, eval = F}
+td$td<50
+```
+What does this output mean? 
+
+What happens when we put this logical statement inside matrix notation? 
+```{r, message = T, eval = F}
+td[td$td<50,]
+```
+
+Here is a list of logical operators in R.
+
+      <   less than
+      <=  less than or equal to
+      >   greater than 
+      >=  greater than or equal to
+      ==  exactly equal to
+      !=  not equal to
+      !x  not x 
+      x|y x or y
+      x&y x and y
+      
+  
 # 2 Exploratory Data Analysis
 
-Now that we're familiar with R we can begin using it to explore our own data. We'll use the `td` object that we created a moment ago. This is a data set we collected in Siberia that contains measurments of permafrost active layer thickness. 
+Now that we're familiar with R we can begin using it to explore our own data. We'll use the *td* object that we created a moment ago. As a reminder, this is a data set we collected in Siberia that contains measurments of permafrost thaw depth. One of the first and most important ways of exploring data is to use *descriptive statistics* that are useful for summarizing data. 
 
+## 2.1 Measures of Variability and Central Tendency
+The *mean*, *median*, and *mode* are all measures that describe central values of data. There are functions in the base version of R for each of these. *Mode* is used less frequently, and there is not a basic function in R, so we'll skip this for now. 
+
+```{r, message = T}
+mean(td$td)
+median(td$td)
+```
+
+There are also a several important measures that characterize the variability in a data set. The *range* describes the minimum and maximum values, and the *interquartile range* is the difference between the 25th and 75th percentiles, when the data are ranked lowest to highest. 
+```{r,message = T}
+range(td$td)
+IQR(td$td)
+```
+
+The *variance* describes the average squared deviation of the observations from the mean value, and the *standard deviation* is the square root of the variance. There are also functions for to calculate each of these statistics in R. 
+
+Why do we use the *standard deviation* more often than the *variance*? How can the *standard deviation* be intepreted? 
+
+```{r, message = T}
+# calculate the variance
+var(td$td)
+
+# calculate the standard deviation
+sd(td$td, na.rm = T)
+
+```
+
+I've added a new argument here in the `sd` function. Use the help to figure out what this means. 
+
+The *coefficient of variation* is another useful measurement. It is a way of relativizing the standard deviation, and is calculated as the ratio of the standard deviation to the mean. Unfortunately there is no function for this in R, but you are now savvy enough to calculate this your self. Calculate a  the *coefficient of variation* using functions and mathematical notation that we've already used. 
+
+# 2.2 Visual Data Description
+While the statistics we calculated above are useful, it is also extremely helpful to visualize the data. Creating a *histogram* is a common way to characterize the statistical distribution of data. A *histogram* shows the frequencies of vaules within a data set. Let's make a histogram of our thaw depth data. 
+
+```{r, message = T}
+hist(td$td)
+```
+
+This is useful, but it looks a bit rough and we should clean it up a bit. At the very least we should add appropriate axis labels and units. 
+
+Use the help and see if you can add a few arguments to make your graph look like the one below (hint - I've added four arguments)
+```{r,message = T, echo = F}
+hist(td$td,
+     main="",
+     xlab = "Permafrost Thaw Depth (cm)",
+     col = "gray",
+     freq=F)
+```
+
+Now see if you can use the matrix subsetting and logical statements from above to create a histogram using only data from the site labeled *wws* (Warren's Wingspan)
+
+```{r,message = T, echo = F}
+hist(td$td[td$site=="wws"],
+     main="Thaw Depth at Warren's Wingspan",
+     xlab = "Permafrost Thaw Depth (cm)",
+     col = "gray",
+     freq=F)
+```
+
+The last things we'll do today is make a *boxplot* of the data using the `boxplot()` function. What does this graph show us? 
+
+```{r, message = T}
+boxplot(td$td)
+```
+
+It turns out we can use a *formula* to tell R if it should separate our data into groups. In our case, each site would be a group. Look at the help for the `boxplot` function to understand what is going on here. What does this graph tell us? 
+
+```{r,message = T}
+boxplot(td$td~td$site)
+```
+
+# 3 Homework
+
+For **Homework Assignment 3** you are to use the shrub allometry data set to: 
+
+1. Create data subsets for each genus (Alnus, Betual, Salix)
+
+2. For each genus calculate the mean, median, and standard deviation for a variable of your choosing.
+
+3. Create a histogram of this variable for each genus. Your histograms should include appropriate axis labels, etc...
+
+4. Create a boxplot of your variable showing separate boxes for each genus. 
+
+5. Write a brief description of your work that includes: 1) an explanation of which variable you chose to summarize and why, 2) a description of what your analyses indicate regarding the similarities/differences between the different shrub genera we studied. 
 
 
 
