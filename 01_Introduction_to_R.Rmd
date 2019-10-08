@@ -237,7 +237,7 @@ boxplot(td$td~td$site)
 
 For **Homework Assignment 3** you are to use the shrub allometry data set to: 
 
-1. Create data subsets for each genus (Alnus, Betual, Salix)
+1. Create data subsets for each genus (Alnus, Betula, Salix)
 
 2. For each genus calculate the mean, median, and standard deviation for a variable of your choosing.
 
