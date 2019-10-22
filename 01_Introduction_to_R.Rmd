@@ -91,12 +91,12 @@ setwd("Z:/Geog250_F19/loranty/")
 Now we can work from this directory. I have a separate *data* folder within my class folder where all of my data files are stored. We can use the `read.csv()` function to read in data files that are in *csv* format. (Note that we can use the `read.table()` function to read other types of files, and there are functions to read excel files too) All of these functions require the the file name as an argument. Here we have to tell R that it is located within the *data* folder in my working directory.
 
 ```{r, message = T,error = T, echo = T}
-td <- read.csv("data/thaw_depth.csv")
+thaw <- read.csv("data/thaw_depth.csv")
 ```
 
 We can also specify the entire filepath as the argument.
 ```{r, message = T,eval = F}
-td <- read.csv("Z:/Geog250_F19/loranty/data/thaw_depth.csv")
+thaw <- read.csv("Z:/Geog250_F19/loranty/data/thaw_depth.csv")
 ```
 
 Use the help function to find out what additional arguments you might use with the `read.csv` function. 
@@ -104,45 +104,45 @@ Use the help function to find out what additional arguments you might use with t
 
 We can use the `head` and `tail` functions to look at the first and last few rows of this dataset, respectively. 
 ```{r,message = T}
-head(td)
+head(thaw)
 
-tail(td)
+tail(thaw)
 ```
 
 We can use matrix notation to access data elements within an object: td[row,column] 
 ```{r,message = T}
 # What is the value in the row 1 column 1
-td[1,1]
+thaw[1,1]
 
 # Or the values in rows 1-5 of column 5
-td[1:5,5]
+thaw[1:5,5]
 ```
 
 Notice here that we have different types of data. Data in the first column is text-based, while the fifth column is numeric. It turns out our data stored as a special kind of matrix called a `dataframe`. We can get some more information about it using the `str()` function. 
 ```{r, message = T}
-str(td)
+str(thaw)
 ```
 
 There are a couple of important things to note here. The first is that with a data frame we can have different types of data. For example try converting our td data frame to a matrix using the `as.matrix()` function. What happens when you do this? Why do you think that is? 
 ```{r, message = T, eval = F}
-as.matrix(td)
+as.matrix(thaw)
 ```
 
 
 Second, you can access variables, or columns within a data frame using the following syntax. 
 ```{r, message = T}
-td$td
+thaw$td
 ```
 
 Another handy thing that R can do is evaluate logical statements. For example, what happens when we look for thaw depths that are less than 50?  
 ```{r, message = T, eval = F}
-td$td<50
+thaw$td<50
 ```
 What does this output mean? 
 
 What happens when we put this logical statement inside matrix notation? 
 ```{r, message = T, eval = F}
-td[td$td<50,]
+thaw[thaw$td<50,]
 ```
 
 Here is a list of logical operators in R.
@@ -166,14 +166,14 @@ Now that we're familiar with R we can begin using it to explore our own data. We
 The *mean*, *median*, and *mode* are all measures that describe central values of data. There are functions in the base version of R for each of these. *Mode* is used less frequently, and there is not a basic function in R, so we'll skip this for now. 
 
 ```{r, message = T}
-mean(td$td)
-median(td$td)
+mean(thaw$td)
+median(thaw$td)
 ```
 
 There are also a several important measures that characterize the variability in a data set. The *range* describes the minimum and maximum values, and the *interquartile range* is the difference between the 25th and 75th percentiles, when the data are ranked lowest to highest. 
 ```{r,message = T}
-range(td$td)
-IQR(td$td)
+range(thaw$td)
+IQR(thaw$td)
 ```
 
 The *variance* describes the average squared deviation of the observations from the mean value, and the *standard deviation* is the square root of the variance. There are also functions for to calculate each of these statistics in R. 
@@ -182,10 +182,10 @@ Why do we use the *standard deviation* more often than the *variance*? How can t
 
 ```{r, message = T}
 # calculate the variance
-var(td$td)
+var(thaw$td)
 
 # calculate the standard deviation
-sd(td$td, na.rm = T)
+sd(thaw$td, na.rm = T)
 
 ```
 
@@ -197,14 +197,14 @@ The *coefficient of variation* is another useful measurement. It is a way of rel
 While the statistics we calculated above are useful, it is also extremely helpful to visualize the data. Creating a *histogram* is a common way to characterize the statistical distribution of data. A *histogram* shows the frequencies of vaules within a data set. Let's make a histogram of our thaw depth data. 
 
 ```{r, message = T}
-hist(td$td)
+hist(thaw$td)
 ```
 
 This is useful, but it looks a bit rough and we should clean it up a bit. At the very least we should add appropriate axis labels and units. 
 
 Use the help and see if you can add a few arguments to make your graph look like the one below (hint - I've added four arguments)
 ```{r,message = T, echo = F}
-hist(td$td,
+hist(thaw$td,
      main="",
      xlab = "Permafrost Thaw Depth (cm)",
      col = "gray",
@@ -214,7 +214,7 @@ hist(td$td,
 Now see if you can use the matrix subsetting and logical statements from above to create a histogram using only data from the site labeled *wws* (Warren's Wingspan)
 
 ```{r,message = T, echo = F}
-hist(td$td[td$site=="wws"],
+hist(thaw$td[thaw$site=="wws"],
      main="Thaw Depth at Warren's Wingspan",
      xlab = "Permafrost Thaw Depth (cm)",
      col = "gray",
@@ -224,13 +224,13 @@ hist(td$td[td$site=="wws"],
 The last things we'll do today is make a *boxplot* of the data using the `boxplot()` function. What does this graph show us? 
 
 ```{r, message = T}
-boxplot(td$td)
+boxplot(thaw$td)
 ```
 
 It turns out we can use a *formula* to tell R if it should separate our data into groups. In our case, each site would be a group. Look at the help for the `boxplot` function to understand what is going on here. What does this graph tell us? 
 
 ```{r,message = T}
-boxplot(td$td~td$site)
+boxplot(thaw$td~thaw$site)
 ```
 
 # 3 Homework
