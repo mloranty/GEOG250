@@ -48,7 +48,7 @@ We can create objects
 die <- 1:6
 
 # we can do all kinds of math on objects
-die - 1
+d2 <- die - 1
 
 die/2
 
