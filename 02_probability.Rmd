@@ -29,7 +29,7 @@ setwd("Z:/Geog250_F19/loranty/")
 
 As we begin to think more deeply about our data it is worth noting the different between *discrete* and *continuous* variables. What is the difference between these two types of data? Can you think of representative examples from the data we used last class?
 
-## 1. Discrete Probaiblity Distributions
+## 1. Discrete Probability Distributions
 
 There happens to be a discrete variable in our thaw depth data set. Let's read it in and have a look. Which variable in this data set is discrete?
 
@@ -110,7 +110,7 @@ The *uniform* distribution is the simplest continuous probability distribution. 
 
 ```{r, message = T,error = T, echo = F, eval = T}
 hist(36:55,breaks = 35:55,probability = T,col = "gray80",
-     xlab = "Number of Leaves",main="")
+     xlab = expression(paste("Water Temperature (",degree*F,")",sep="")),main="")
 ```
 
 Another useful visualization, especially for continuous probability distributions, is to plot the cumulative frequency. 
