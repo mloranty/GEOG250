@@ -1,0 +1,259 @@
+---
+title: "Inference & Hypothesis Testing"
+author: "Mike Loranty"
+date: "10/29/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(root.dir = "Z:/Geog250_F19/loranty/")
+```
+
+This week we will continue working with our field data from Siberia and learn how to use basic statisics to test hypotheses.
+
+To begin, let's create a new script, fill in the appropriate header information, and set our working directory.
+```{r,collapse = T, eval=F}
+#####################
+# inference and hypothesis testing script
+# GEOG250 F19
+# MML 10/29/19
+#####################
+
+# set working directory to my folder on the server
+setwd("Z:/Geog250_F19/loranty/")
+
+# remember that you should be writing good descriptive comments here - these are your notes!
+
+```
+
+## 1. Samples and Confidence Intervals
+
+Since we first began using R we have primarily been focused on using *descriptive* statistics to characterize our sample data sets. Now that we have a better understanding of our data, as well as some key concepts related to probability and distributions, we can begin to think about using *inferential* statistics to make inferences about populations using our sample data sets. 
+
+Characterizing the *confidence interval* for a mean is a useful place to start. Here,will rely on the *central limit theorem*, which states that the mean value of a *sample* that is comprised of a series of *independent observations* of a *random variable* tends toward a normal distribution. In other words, for example, if we were to collect many samples of permafrost thaw depth for a particular research site, comprised of 30 observations, the mean thaw depth values of all of the samples would have a normal distribution centered around the true mean for each site. Because of this, we can use our knowledge of the standard normal distribution to quantify how confident we are that the true mean for a site is within a given interval of the sample mean. 
+
+We can explore these ideas more using our own thaw depth data set. 
+
+```{r, message = T,error = T, echo = T}
+thaw <- read.csv("data/thaw_depth.csv")
+```
+
+```{r, message = T,error = T, echo = F}
+x <- mean(thaw$td[thaw$site=="wws"])
+s <- sd(thaw$td[thaw$site=="wws"])
+n <- length(thaw$td[thaw$site=="wws"])
+```
+
+Now calculate the *mean (x)*, *standard deviation (s)*, and *sample size (n)* for the all of the thaw depth values from the site called Warren's Wing Span. Below are the values that I get (note I have created new objects *x*, *s*, and *n* - you should do this too).
+
+```{r, message = T,error = T, echo = T}
+x
+s
+n
+
+```
+Before we continue further we need to go over one more descriptive statsitc that we didn't examine before, the *z-score*. This is a way to characterize an observation from a sample data set in terms of how many standard decviations away from the mean it is. And is calculated as the difference between the observation value and the sample mean, divided by the standard deviation. For example we could do this for the maximum value from our WWS site. 
+
+```{r, message = T,error = T, echo = T}
+# determine the maximum value from the wws site
+m <- max(thaw$td[thaw$site=="wws"])
+
+# now calculate the z-score
+ z <- (m-x)/s
+ 
+ # round the z-score to the nearest hundreth for use in Table A2
+ z <- round(z,digits=2)
+```
+What does this value mean? Use this value to look up the associated probability in Table A2 of the text book. 
+
+**What is the probability from Table A2, and what does this mean?** 
+
+Recall from last week that we can use the *z-score* to determine the probability associated with a particular value, given the standard normal distribution. For example, we can think of the likelihood of getting a value greater than ours as indicated below.
+
+```{r, message = T,error = T, echo = t, eval = T}
+# plot the standard normal distribution
+plot(seq(-3,3,0.1),dnorm(seq(-3,3,0.1),0,1),
+     xlab = "",ylab = "Probability", type = "l", lwd = 2)
+
+
+polygon(c(seq(z,3,0.01),seq(3,z,-0.01)),
+        c(dnorm(seq(z,3,0.01),0,1),rep(0,length(seq(3,z,-0.01)))),
+        col = "blue")
+```
+
+Or, we can visualize this in terms of our own data. See if you can produce the graph below using the code example above, and your cade from class last week. 
+
+```{r, message = T,error = T, echo = F, eval = T}
+hist(thaw$td,probability = T,
+     xlim = c(0,100),main="",
+     xlab = "Thaw Depth (cm)",
+     ylab = "Probability")
+
+lines(1:100,dnorm(1:100,mean(thaw$td),sd(thaw$td)),
+      lwd=2)
+
+polygon(c(m:100,100:m),
+        c(dnorm(m:100,mean(thaw$td),sd(thaw$td)),rep(0,length(m:100))),
+        col = "blue")
+```
+
+Lastly, remember that we can also use the `pnorm` function, that describes random normal distributions to calculate these things as well. 
+
+```{r, message = T,error = T, echo = T}
+pnorm(m,x,s)
+
+# or 
+
+1-pnorm(m,x,s)
+```
+
+
+So, basically, we're using our *z-scores* to determine the probability of exceeding a certain value, or not, by characterizing that value in terms of the mean and standard deviation, and then assigning a probablity related to the assumption that the data are normally distributed. 
+
+*GEE DANG!* That was a whole lot of stuff, and we haven't even made it to our confidence intervals yet. 
+
+So, if we bring this back to the context of the sample mean versus the population mean, there are just a few more key pieces of info that we need. 
+
+First, it turns out that, for a standard normal distribution 95% of the data fall within 1.96 standard deviations of the mean, which looks like this graphically. 
+
+```{r, message = T,error = T, echo = F, eval = T}
+# plot the standard normal distribution
+plot(seq(-3,3,0.1),dnorm(seq(-3,3,0.1),0,1),
+     xlab = "",ylab = "Probability", type = "l", lwd = 2)
+
+
+polygon(c(seq(-1.96,1.96,0.01),seq(1.96,-1.96,-0.01)),
+        c(dnorm(seq(-1.96,1.96,0.01),0,1),rep(0,length(seq(-1.96,1.96,0.01)))),
+        col = "blue", border = NA)
+```
+
+Remember that this accounts for 95% of the area under the curve. 
+
+Now, it turns out that the variability of sample means is equal to the variance divided by the sample size. 
+
+So, we can calculate the 95% confidence interval as 1.96 times the standard deviation divided by the square root of the sample size. 
+
+```{r, message = T,error = T, echo = T}
+(1.96*s)/sqrt(n)
+```
+
+What does this number mean to us? 
+
+Note that the z-value applies only when the sample size (*n*) is sufficinetly large, and in the case of small samples the *t-distribution* is used. A sample size of 30 is typically. 
+
+
+```{r, message = T,error = T, echo = F}
+x2 <- mean(thaw$td[thaw$site=="bfg"])
+s2 <- sd(thaw$td[thaw$site=="bfg"])
+n2 <- length(thaw$td[thaw$site=="bfg"])
+```
+For example, if we define the mean, standard deviation, and sample size of thaw depth data from the *BFG* site as *x2*, *s2*, and *n2*
+
+```{r, message = T,error = T, echo = T}
+x-x2
+
+1.96*sqrt(s^2/n+s2^2/n2)
+```
+
+How do we intepret these values? 
+
+Note that we can also calculate confidence intervals for proportional data using a similar approach. But in the interest of time we will not step through that here. 
+
+
+## 2. Hypothesis Testing
+
+Now, using these assumptions related to the normal distribution of sample data, we can test hypotheses. We'll continue on using our thaw depth data as an example and begin using by performing a one-sample z-test of the mean. The first step is to develop a *null hypothesis*. 
+
+For example, the null case might be that the true mean thaw depth at WWS is 45, which is long term mean for similar ecosystems in the region.
+
+  *H*~0~:$\mu$=45
+
+Null hypotheses can be viewed as a default, in that failing to reject it indicates that our sample is representative of the regional average. 
+
+Next, we establish an alternative hypothesis. Alterntive hypotheses can be one-sided (e.g. the true mean thaw depth is greater than 45cm), 
+
+  *H*~A~: $\mu$>45
+  
+or two-sided (e.g. the true mean thaw depth is greater than 45cm).
+
+  *H*~A~: $\mu\neq$ 45
+  
+  In the latter case we are saying that the ture mean thaw depth can be *either* less than or greater than the sample mean.  
+
+Here we also need to choose a significance level or $\alpha$, which corresponds to the likelihood of making a *Type I* error. This is where the true null hypothesis is rejected (e.g. the commonly used $\alpha$ = 0.05 means that the true null is rejected 95% of the time).The alternative is a *Type II* error, which is when we fail to reject a false null hypothesis, and we cannot control this (though it is inversely proportional to $\alpha$ )
+
+Now we can calculate our *z-score* as follows: 
+
+z = $\frac{x-\mu}{s/\sqrt{n}}$
+
+or
+
+```{r, message = T,error = T, echo = T}
+((x-45)/(s/sqrt(n)))
+
+
+```
+
+Using the Table A2, what is our *p-value*? 
+
+What does this mean, and how do we intepret this result?
+
+This type of testing can be useful if you are interested in knowing whether your sample is representative of, or deviates from, a larger population. Note too that as with our previous examples, the *t-score* can be used in cases with a small sample size, and there are also variants of this analysis that can be used with proportional data. 
+
+Before we move on, it is important to take a moment to consider *p-values*. Traditionally, *p-values* have been used to determine whether or not a result is statistically significant. This has come to be seen as problematic for several reasons, including the arbitrary selection of $\alpha$ values, and the potential for misintepretation of results. As an alternative to this, some scientists now simply report *p-values*, without definitevely rejecting or failing to reject hypotheses, and let the scientific community intepret the results and determine their importance. 
+
+Now that we've considered that, let's look at one final example; testing for differences in means. Here we will use a *t-test*, which you may be familiar with and is often refered to as the Student's t-test. As you've likely noted from the many hours spent pouring through the text book,our math is becoming slightly more complex. Luckily for us, there happens to be the `t.test` function for us to use in R. 
+
+Let's give it a whirl.
+
+```{r, message = T,error = T, echo = T}
+t.test(thaw$td[thaw$site=="wws"],
+       thaw$td[thaw$site=="bfg"],
+       var.equal = T,
+       conf.level = 0.01)
+
+# or we can specify our variables a little differently,
+# and change our confidence interval
+# and our assumption about the variance
+t.test(td~site,
+       data = thaw,
+       var.equal = F,
+       conf.level = 0.05)
+
+# we can even use this for one sample testing
+t.test(thaw$td[thaw$site=="wws"],
+       mu=45,
+       conf.level = 0.01)
+
+```
+
+Let's exmaine some of the differences in the test we just ran. Specifically, what do the `var.equal`, and `conf.level` arguments mean? 
+
+What can we say about the differences between our two thaw depth data sample data sets? 
+
+
+# Homework
+
+For **Homework Assignment 4** you are to use the shrub allometry data set to: 
+
+1. Perform **three** *t-tests* using subsets of the data. You may compare any aspects of the data that you choose. 
+
+2. Create box and whisker plots for each of your t-tests. 
+
+3. Submit a brief writeup that includes: 1) an explanation of which susbets of the data you chose to analyze and why, 2) state the null and alternative hypotheses, 3) report the lieklihood of whether or not your sample data represent two distinct populations.
+
+Your writeup should be in MS Word format, and submitted via email, with the file named similarly to the midterm. Your code should be your directory on the GEOG server. 
+
+
+
+
+
+
+
+
+
+
+
+
+

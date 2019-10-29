@@ -1,5 +1,5 @@
 ---
-title: "Probability Distributions & Hypothesis Testing"
+title: "Probability Distributions "
 author: "Mike Loranty"
 date: "10/22/2019"
 output: html_document
