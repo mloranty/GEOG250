@@ -82,9 +82,9 @@ polygon(c(seq(z,3,0.01),seq(3,z,-0.01)),
         col = "blue")
 ```
 
-Or, we can visualize this in terms of our own data. See if you can produce the graph below using the code example above, and your cade from class last week. 
+Or, we can visualize this in terms of our own data. See if you can produce the graph below using the code example above, and your code from class last week. 
 
-```{r, message = T,error = T, echo = F, eval = T}
+```{r, message = T,error = T, echo = T, eval = T}
 hist(thaw$td,probability = T,
      xlim = c(0,100),main="",
      xlab = "Thaw Depth (cm)",
