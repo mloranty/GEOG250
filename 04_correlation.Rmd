@@ -4,12 +4,7 @@ author: "Mike Loranty"
 date: "11/5/2019"
 output: html_document
 ---
----
-title: "04_correlation"
-author: "Mike Loranty"
-date: "11/5/2019"
-output: html_document
----
+
 
 
 ```{r setup, include=FALSE}
