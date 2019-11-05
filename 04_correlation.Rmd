@@ -4,12 +4,7 @@ author: "Mike Loranty"
 date: "11/5/2019"
 output: html_document
 ---
----
-title: "04_correlation"
-author: "Mike Loranty"
-date: "11/5/2019"
-output: html_document
----
+
 
 
 ```{r setup, include=FALSE}
@@ -22,7 +17,11 @@ This week we will continue working with our field data from Siberia and learn ho
 To begin, let's create a new script, fill in the appropriate header information, and set our working directory.
 ```{r,collapse = T, eval=F}
 #####################
+<<<<<<< HEAD
 # correlation script
+=======
+# inference and hypothesis testing script
+>>>>>>> 5e514276a1519494595521236bbc7840a4e4a36c
 # GEOG250 F19
 # MML 11/05/19
 #####################
