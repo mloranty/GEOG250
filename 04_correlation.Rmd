@@ -1,0 +1,106 @@
+---
+title: "04 Correlation"
+author: "Mike Loranty"
+date: "11/5/2019"
+output: html_document
+---
+---
+title: "04_correlation"
+author: "Mike Loranty"
+date: "11/5/2019"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(root.dir = "Z:/Geog250_F19/loranty/")
+```
+
+This week we will continue working with our field data from Siberia and learn how examine and quantify relationships between variables.
+
+To begin, let's create a new script, fill in the appropriate header information, and set our working directory.
+```{r,collapse = T, eval=F}
+#####################
+# correlation script
+# GEOG250 F19
+# MML 11/05/19
+#####################
+
+# set working directory to my folder on the server
+setwd("Z:/Geog250_F19/loranty/")
+
+# remember that you should be writing good descriptive comments here - these are your notes!
+
+```
+
+## 1. Covariance
+
+Last week we used inferential statistics to determine the likelihood that two sample data sets were drawn from different populations. In geographic research this type of analysis is extremely useful for discerning meaningful differences, in space or time, for a variable of interest. 
+
+Another important goal of geographic analysis is to determine whether associations exist between variables. In this case, we can use statistical measures of association to determine whether two variables are related, and then combine this with our knowledge of geographic phenomenon to hypothesize what underlying processes might be driving this relationship. This in turn can help us to better understand the processes that shape the world around us. 
+
+To begin, let's consider the concept of *covariance*, which simply refers to how two variables change in relation to one another. 
+
+Recall that the sample variance $s^{2}$ is calculated as the sum of squared deviations from the mean: 
+
+
+####   $s^{2}$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})}{n-1}$
+
+
+We can compare this to the calculation of the *covariance* and note the similarities: 
+
+####   $cov(x,y)$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})(y_{i}-\overline{y})}{n-1}$
+
+The covariance is simply the product of each variables deviation from its mean, summed over all observations. If you replace *y* with *x* then you have the expanded formula for the variance of x. 
+
+Let's examine correlation between variables in one of our own data sets. Our favorite data set, shrub leaves! Read in the shrub allometry data file. I'm creating an object called `shr`, and it might be helpful for you to do this as well. 
+
+```{r, message = T,error = T, echo = F}
+shr <- read.csv("data/shrub_allometry.csv")
+```
+
+Luckily for us `R` is a great stats package that has a covariance function for us already: `cov`. Have a look at the help for this function. What are the arguments we need to use here? Let's calculate the covariance between shrub diameter and leaf mass. Here is the answer I get. 
+
+```{r, message = T,error = T, echo = F}
+cov(shr$diameter,shr$mass)
+```
+
+What does this value mean, and how can we intepret it? As you may have guessed, the *covariance* changes with the magnitude of our observations, making it hard to intepret. But it turns out that we can standardize the covariance to range from values of -1 to 1 by dividing by the product of the standard deviations, as follows: 
+
+
+####   $r$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})(y_{i}-\overline{y})}{(n-1)s_{x}s_{y}}$
+
+You may be familiar with this variable, which is referred to as the *Pearson's* correlation coefficient. Note that this only applies to *linear* associations between variables. We can calculate the *Pearson's* correlation coefficient using the `cor` function in R. 
+
+```{r, message = T,error = T, echo = F}
+cor(shr$diameter,shr$mass)
+```
+
+What does this tell us? As our book notes, and you likely know, it is important to create a *scatterplot* of the variables of interest in order to aid interpreation. Why is this so important? 
+
+Generate the following plot. 
+
+```{r, message = T,error = T, echo = F}
+plot(shr$diameter,shr$mass,
+     col=shr$species,
+     pch=16,
+     xlab = "Basal Diameter (cm)",
+     ylab = "Leaf Mass (g)")
+
+```
+
+What can we infer from this data? What type of relationship exists here? 
+
+
+It turns out we can also perform a significance test to evaluate the null hypothesis that the true correlation coefficient is equal to zero. Specifically, we can calculate the *t statistic*, which is a function of sample size, to determine significance. We can do this in `R` using the `cor.test` function. Do this for the same data we used above. 
+
+```{r, message = T,error = T, echo = F}
+cor.test(shr$diameter,shr$mass)
+```
+
+
+You may note that there are several options in the `cor` and `cor.test` functions for the `method` argument. What are these? 
+
+With the remainder of our class time you should: 1) calculate separate correlation coeficents to describe the relationships between basal diamter and length for each genus, and 2) create a single graph that illustrates this relationship using different symbology for each genus. 
+
