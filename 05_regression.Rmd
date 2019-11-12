@@ -1,0 +1,132 @@
+---
+title: "05 Regression Analysis"
+author: "Mike Loranty"
+date: "11/12/2019"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(root.dir = "Z:/Geog250_F19/loranty/")
+```
+
+This week we will continue working with our field data from Siberia and learn how examine and quantify relationships between variables.
+
+To begin, let's create a new script, fill in the appropriate header information, and set our working directory.
+```{r,collapse = T, eval=F}
+#####################
+# correlation script
+# GEOG250 F19
+# MML 11/05/19
+#####################
+
+# set working directory to my folder on the server
+setwd("Z:/Geog250_F19/loranty/")
+
+# remember that you should be writing good descriptive comments here - these are your notes!
+
+```
+
+
+Last week we learned to calculate the *covariance* between two variables in order to qunatify the linear association between them. More specifically, we use the Pearson's correlation coefficient (*r*) as a means of normalizing the covariance so that it scales from -1 to 1, and can be interpreted as the strength of the relatiohship between the two variables. 
+
+This week we will extend this process by generating an equation that describes the relationship between the variables of interest. It is important to note that regression analysis assumes a linear relationship between two variables: the *dependent* or *reposnse* variable (*y*), and the *independent* or *explanatory* variable (*x*). Stated plainly, we can use regression analysis to quantify how the magnitude of change in our dependent variable (*y*), given a change our independent variable (*x*). For example, how much will leaf mass change in response to an increase in shrub basal area. We should note that we will consider only simple linear regression, which considers two variables, as opposed to a multiple regression that may include more than one *independent* or *explanatory* variable.  
+
+For a linear relationship between two variables, we can use the following equation to represent the best fit line between the data points. You can think of this line as a model capable of predicting values of the *dependent* variable ($\hat{y}$), for a given observation of the *independent* variable (*x*), the *intercept* of the line (*a*), and the *slope* of the line (*b*). 
+
+$\hat{y}$=$a + bx$
+
+We will not delve into the mathematics of regression analysis here, but there are several important points to consider related to regression analysis. To help illustrate this points we can look again at some of our own data. As we did last week, let's read in our shrub allometry data set and create an object names `shr`. 
+
+```{r, message = T,error = T, echo = F}
+shr <- read.csv("data/shrub_allometry.csv")
+
+aln <- shr[shr$species=="aln",]
+```
+Next, subset the data to include only Alder shrubs, and create the following plot. 
+```{r, message = T,error = T, echo = F, fig.width = 6, fig.height = 6}
+plot(aln$diameter,aln$mass,
+     pch = 16,
+     xlab = "Basal Diameter (cm)",
+     ylab = "Leaf Mass (g)")
+```
+
+The first question we ought to consider is whether or not there appears to be a linear relationship between our variables? What do you think? If the answer is yes, then we may proceed, otherwise we could either transform our data to make it linear, or use a non-linear regression. We will not cover non-linear regression this semester, but it is good to know that this is an option that exists. 
+
+If our relationship appears linear, we can go ahead and perform a regression analysis in R using the `lm` function. 
+```{r, message = T,error = T, echo = T}
+aln.reg <-lm(aln$mass~aln$diameter)
+```
+
+Now we can use the `summary` function to learn a bit more about our regression analysis, and the `abline` function to add the regression line to our plot. Let's step through the summary of our regression to understand what is happening. 
+
+In particular it is important to understand what the concept of minimizing the residuals means.
+
+```{r, message = T,error = T, echo = T, fig.width = 6, fig.height = 6}
+summary(aln.reg)
+
+plot(aln$diameter,aln$mass,
+     pch = 16,
+     xlab = "Basal Diameter (cm)",
+     ylab = "Leaf Mass (g)")
+abline(aln.reg,lty="dashed")
+```
+
+Let's look at how our predictions compare to the observed values.
+```{r, message = T,error = T, echo = T, fig.width = 6, fig.height = 6}
+summary(aln.reg)
+
+plot(aln$mass,predict(aln.reg),
+     pch = 16,
+     xlab = "Observed Leaf Mass (g)",
+     ylab = "Predicted Leaf Mass (g)")
+abline(a = 0, b = 1)
+```
+
+
+We can do the same thing for our Betula data. In thise case the regression look quite good, however the data are slightly non-linear at low values. 
+```{r, message = T,error = T, echo = F, fig.width = 6, fig.height = 6}
+bet <- shr[shr$species=="bet",]
+plot(bet$diameter,bet$mass,
+     pch = 16,
+     xlab = "Basal Diameter (cm)",
+     ylab = "Leaf Mass (g)")
+abline(lm(bet$mass~bet$diameter))
+summary(lm(bet$mass~bet$diameter))
+```
+
+So, here we might try to log-transform our data. What difference does this make? 
+```{r, message = T,error = T, echo = T, fig.width = 6, fig.height = 6}
+bet <- shr[shr$species=="bet",]
+plot(bet$diameter,log(bet$mass),
+     pch = 16,
+     xlab = "Basal Diameter (cm)",
+     ylab = "log Leaf Mass (g)")
+abline(lm(log(bet$mass)~bet$diameter))
+summary(lm(log(bet$mass)~bet$diameter))
+```
+
+
+### Assignment 5
+
+This week we are going to branch out a bit and use a publicly available data set to do the following: 
+
+1. [Download this dataset describing soil properties and permafrost thaw depths from the Arctic Data Center website](https://arcticdata.io/catalog/view/https://pasta.lternet.edu/package/metadata/eml/knb-lter-bnz/560/4) (hint - you can use the `read.table` function and the data file URL to read the data directly into R)
+```{r, message = T,error = T, echo = F, eval = F}
+soil <- read.table("https://arcticdata.io/metacat/d1/mn/v2/object/https%3A%2F%2Fpasta.lternet.edu%2Fpackage%2Fdata%2Feml%2Fknb-lter-bnz%2F560%2F4%2F367f95efb22181b5f5dc864ef2f1b6fd", sep = "\t", header = T)
+```
+2. Aggregate the data by site. 
+
+3. Calculate a linear regression to describe the relationship between soil organic layer depth and permafrost thaw depth.
+
+4. Create a scatter plot of your data that includes the best fit regression line. 
+
+5. Write a brief paragraph the describes the results of your analysis. This should include key regression parameters and statistics, a copy of your plot, and a brief discussion of the relationship between your data. For the discussion, you should consider why these variables may or may not be related, and what other important factors could be missing. ([See this paper for help](https://www.biogeosciences.net/15/5287/2018/))
+
+5. In addition see the following document outlining your class research project. Before class next week you should articulate a draft of your research question. 
+
+This assignment is due by noon on Tuesday 19 Nov. 
+
+
+
