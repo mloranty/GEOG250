@@ -1,0 +1,19 @@
+name: "GEOG 250"
+output_dir: "."
+navbar:
+  title: "GEOG 250"
+  left:
+    - text: "1. Introduction to R"
+      href: 01_Introduction_to_R.html
+    - text: "2. Probability"
+      href: 02_probability.html
+    - text: "3. Inference"
+      href: 03_inference.html
+    - text: "4. Correlation"
+      href: 04_correlation.html
+    - text: "5. Regression"
+      href: 05_regression.html
+output:
+  html_document:
+    theme: paper
+    css: 'styles.css'

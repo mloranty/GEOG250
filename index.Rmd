@@ -1,0 +1,6 @@
+---
+---
+
+<link rel="stylesheet" href="styles.css" type="text/css">
+
+This site contains lessons and exercises for GEOG250, Research Methods in Geography. 
