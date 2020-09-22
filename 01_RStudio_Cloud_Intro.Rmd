@@ -1,0 +1,188 @@
+---
+title: "Activity 1: Intro to Github & R"
+author: "Mike Loranty"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::include_graphics
+#setwd("G:/My Drive/Documents/teaching/GEOG331/F20/activities/activity1/")
+library(imager)
+```
+#### _GEOG 250: Research Methods in Geography, Colgate University_
+## Instructions
+There are 3 questions to this activity. Save your answers in word document that you will hand in on Moodle using a .pdf extension. Keep your script file in your GitHub folder and make sure that all changes are pushed to GitHub. You will include a link to this file as a part of your final question in this activity.
+
+## Learning objectives
+#### 1. Learn to us RStudio Cloud
+#### 2. Introduction to Data Manipulation in R
+
+## Files in Computers
+
+
+
+## Intro to Git
+Git and the user interface GitHub allow you to keep track of all changes to your code. You just have to indicate points where you want to save the state of your code and give it a tag. Here, we’ll go through the basics of Git and GitHub. A repository groups together code and any documentation files for a users project. You can keep track of any changes to files in each repository to document each version of your code. **NEVER, NEVER, NEVER, put username and password info in files on GitHub (can’t emphasize this enough)**. This is the easiest way to get hacked.
+
+
+
+
+
+<br/>
+<center>
+![](images/git_clone.PNG)
+</center>
+<br/>
+
+Now, go back to RStudio and past that in the *Clone Git Repository* window. Here you also need to specify a project directory (folder) name, and specify where on your computer you want that project folder to sit. I've put mine in the *GitHub* directory in my *Documents* folder, and I recommend that you do the same. 
+
+<br/>
+<center>
+![](images/R_version_control3.PNG)
+</center>
+<br/>
+
+Once you've entered all of this information click the *Create Project* button, and now you should see an RStudio window that looks something like this. 
+
+<br/>
+<center>
+![](images/R_version_control4.PNG)
+</center>
+<br/>
+
+
+Next we will open a script, from the menu bar navigate to File>New>R Script. You should see a new pane in the upper left in RStudio. In your script type the following: 
+
+```{r,eval = F}
+print("Hello World")
+```
+Now click the file icon on the script tab, and save your file as 'Activity1'. Notice a couple of things here: 1) Nothing happened when we typed a command in our script, and 2) it automatically saved in our GitHub repository folder. This is our first step in version control, we have made a change to our repository by adding a script. 
+
+Remember, the script is a list of commands, the console is where these get commands are executed. In order to execute our commands we can other copy and paste them in the console or put our cursor on the line where the code is and press CTRL Enter on PC or CMD Enter on Mac. Let's try that. 
+```{r,eval = T}
+print("Hello World")
+```
+
+Great, now we have our first script. Let's now update our GitHub repository to reflect these changes. The first thing we need to do is 'commit' our changes. In the Git tab in the upper right, we need to check the files that we are committing changes to, and then press the *commit* button. Notice that I have checked boxes for all files, because I want to add my RStudio project file to the repository as well. 
+
+<br/>
+<center>
+![](images/git_select.PNG)
+</center>
+<br/>
+
+This will open a new window, that shows us the changes that have been made, and gives us an option to add a message to the commit. These messages are an important record of changes that have been made to your code over time. 
+<br/>
+
+Once you have done this, click the *Commit* button, and then once your commit has finished click the up arrow that says *Push*. This will push all of your changes to the GitHub repository. 
+
+<br/>
+<center>
+![](images/git_commit.PNG)
+</center>
+<br/>
+
+You should see a window like this once your updates have been pushed to GitHub. 
+
+<br/>
+<center>
+![](images/git_push.PNG)
+</center>
+<br/>
+ 
+<br/>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Take a screenshot of your updated repository on GitHub with your new commit. Write a brief narrative description of the three steps to committing a change.",width=70)
+text(800,75, "Question 1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br/>
+
+***
+
+Now we are ready to begin using R.  As we discussed in class, R scripts allow you to save code in a text file to run in R. R scripts all have a .r extension. By itself, the script will do nothing. You need to actually tell R to run your code. The console runs your R code. It’s the calculator! You can type code into the console and it will run. However, you won’t be able to access that code later. That’s why we use scripts. Anything that has run in the console is a part of your working environment. The working environment saves your calculations in the computer’s temporary memory. When you close R, your working environment will disappear. However, when you write good script, you can rerun the code in the script and all of the items in your working environment will be the same as when you last used R.
+
+There are many different ways to interface with R. You can even run scripts from the command line! I will work interchangeably between different R interfaces. You can choose how you would like to work with R.The base R program has an option for writing scripts and sending lines of code. However, the script editor doesn’t have any formatting help or color coding of different types of code. This is often not a user friendly option.
+
+We’ll start working with R more next week and read in data. However, let’s get a feel for how R works more.
+
+Since R is just like a sophisticated calculator, you can read in numerical operations and will get the calculations as output. Type a few different operations like the one below. Note I’ve included both the code and outputs here for an example.
+
+
+```{r pressure, echo=TRUE}
+# remember that this is a comment that R will ignore
+# it's extremely important to use comments for documenting your code and writing notes
+# let's calculate 6 raised to the 6 power
+6^6
+```
+
+```{r}
+#234 + 8
+234+8
+```
+
+```{r}
+#15-23
+15-23
+```
+
+
+There’s a few things to pay attention to in the console. The > symbol always indicates a new line of code. The + symbol means your line is continuing. Your results will have numbers in brackets to describe the output. [1] Means I have a vector and my output starts on the first element of my vector (in this case its a vector of one).
+
+You can also give objects names. Below is an example where I know I will want to use the number 2446 many times so I will give it a shorter name. R conducts all operations on that number. The <- symbol means you are assigning an object a **variable name**.
+
+```{r}
+# name my number
+a <- 6234
+# multiply my number by 5
+a*5
+```
+
+```{r}
+# divide my number by 3
+a/3
+```
+
+R automatically does vector operations (think about code differently you Python and C coders!). You can assign two numbers to a variable name and do math operations on them. First you have to let R know you are making a vector of multiple numbers using c(,…,)
+
+
+```{r}
+# make a vector of numbers
+b <- c(2395,82,2947)
+#divide all numbers by 2
+b/2
+```
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Practice writing mathematical operations in R and making vectors using variable names. Run 3 calculations that use vectors with at least four numbers and a variable name.",width=70)
+text(800,75, "Question 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br/>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Add all of your changes to your script, commit, and push to GitHub. Paste the URL to your completed R script in your repository as the answer to this question.",width=70)
+text(800,75, "Question 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br/>
+
+**Great job getting started with version control and R!** Next week we'll begin to analyze data. 
