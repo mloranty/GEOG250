@@ -10,8 +10,6 @@ knitr::include_graphics
 library(imager)
 ```
 #### _GEOG 250: Research Methods in Geography, Colgate University_
-## Instructions
-There are 3 questions to this activity. Save your answers in word document that you will hand in on Moodle using a .pdf extension. Keep your script file in your GitHub folder and make sure that all changes are pushed to GitHub. You will include a link to this file as a part of your final question in this activity.
 
 ## Learning objectives
 #### 1. Learn to use RStudio Cloud
