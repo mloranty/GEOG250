@@ -195,7 +195,15 @@ Most data that you will work with is too large to be typed into R scripts. A lot
 
 
 To begin, in your file window, click the *New Folder* icon and create a new folder named *data*. Next, click the *upload* button, and then the *Choose File* button, and navigate to the *thaw_depth.csv* file that I sent you.  
+
+This data file contains measurements of permafrost thaw depth for several field sites in northeastern Siberia. Permafrost is perennially frozen ground that occurs throughout the Arctic and sub-Arctic. During the summer each year the top soil layers thaw, and these measurements quantify the depth of this thawed layer. These measurements can help understand permafrost thaw, which has has important climate change implications
  
+<br/>
+<center>
+![](images/permafrost.JPG)
+</center>  
+<br/>
+
 We can use the `read.csv()` function to read in data files that are in *csv* format. (Note that we can use the `read.table()` function to read other types of files. All of these functions require the the file name as an argument. Here we have to tell R that it is located within the *data* folder in my working directory.
 
 ```{r, message = T,error = T, echo = T}
@@ -265,7 +273,7 @@ Here is a list of logical operators in R.
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("Calculate the mean thaw depth for each transect in our data frame. (Hint use the 'unique' function to find out about transects)",width=70)
+a <- strwrap("Use matrix notation to calculate the mean thaw depth for each site in our data frame. (Hint use the 'unique' function to find out about sites)",width=70)
 text(800,75, "Code Challenge 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
@@ -273,3 +281,31 @@ for(i in 1:length(a)){
 ```
 </center>
 <br/>
+
+It is also possible to visualize data in R. This is another important part of the data analyses we will be learning this semester. Let's plot thaw depth values along the transect at the *wws* site. 
+
+```{r, message = T, eval = T}
+plot(thaw$location[thaw$site=="wws"],thaw$td[thaw$site=="wws"])
+```
+
+This is nice, but we need to clean it up a bit by adding axis labels, specifying units, and making things a bit easier to see. 
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the arguments in the plot function to make a graph that looks like the one below.",width=70)
+text(800,75, "Code Challenge 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+
+```{r, echo = F, message = T, eval = T}
+plot(thaw$location[thaw$site=="wws"],-thaw$td[thaw$site=="wws"],
+     ylim = c(-70,0),
+     type = "b", lwd = 2, col = "blue",
+     xlab = "Transect Location (m)",
+     ylab = "Thaw Depth (cm)", 
+     main = "WWS Permafrost Thaw Depth")
+```
