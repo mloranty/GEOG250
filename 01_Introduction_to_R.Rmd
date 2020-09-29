@@ -309,3 +309,31 @@ plot(thaw$location[thaw$site=="wws"],-thaw$td[thaw$site=="wws"],
      ylab = "Thaw Depth (cm)", 
      main = "WWS Permafrost Thaw Depth")
 ```
+
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Calculate the standard deviation, variance, coefficient of variation, and standard error of the mean for the thaw depth at the WWS site. (Hint there may be existing functions to help you, Google is your friend)",width=70)
+text(800,75, "Code Challenge 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the hist function to create a histogram like the one below for thaw depth at the WWS site. Does this data look normally distributed? ",width=70)
+text(800,75, "Code Challenge 5:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+```{r, echo = F, message = T, eval = T}
+hist(thaw$td[thaw$site=="wws"],
+     col = "lightblue",
+     xlab = "Thaw Depth (cm)",
+     main = "WWS Permafrost Thaw Depth")
+```
