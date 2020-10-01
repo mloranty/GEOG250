@@ -1,5 +1,5 @@
 ---
-title: "Introduction to R & Data Exploration"
+title: "Introduction to R & Summary Statistics"
 author: "Mike Loranty"
 output: html_document
 ---
@@ -337,3 +337,124 @@ hist(thaw$td[thaw$site=="wws"],
      xlab = "Thaw Depth (cm)",
      main = "WWS Permafrost Thaw Depth")
 ```
+
+
+## Homework 2
+
+For this homework we will begin to explore a weather data set that we will use in the coming weeks as we learn about probability. Please answer the following questions. For this homework, you should create a new 'homework2' script in your RStudio Cloud work space. Your script should be well commented, easy to understand, and not contain any extraneous or unnecessary code. For questions requiring a narrative response, record your answers in a separate document that you will submit to Moodle as an MS word or PDF document. 
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Download the 2011124.csv data file from Moodle, load it into the data folder in your RStudio Cloud class workspace, and use the read.csv function to read the data into R using datW as the object name. In the read.csv function, set the stringsAsFactors arguments to true (Hint - use the help to see what this means).",width=70)
+text(800,-100, "Question 1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Explain the difference between character and factor data types in R (Hint - Google is your friend).",width=70)
+text(800,-100, "Question 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("How many rows and columns are in this dataset?",width=70)
+text(800,75, "Question 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br>
+Before we go any further, we are going to want to change the date format from a factor so it is a little more useful.
+<br>
+```{r echo=FALSE,}
+#specify a column with a proper date format
+#note the format here dataframe$column
+datW <- read.csv("data/2011124.csv", stringsAsFactors = T)
+#google date formatting in r to find more options and learn more
+
+```
+
+```{r echo=TRUE, , evaluate = FALSE}
+#specify a column with a proper date format
+#note the format here dataframe$column
+datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
+#google date formatting in r to find more options and learn more
+
+```
+<br>
+We also will find it helpful to have a year column that is numeric for working with the data. You can use the **format** function. This will output a date formatted to just include year in a character data type. Since this data is simply a numeric date, we will indicate that it should actually be numeric using the as.numeric function. Note how R lets you nest functions here.
+<br>
+```{r echo=TRUE, evaluate = FALSE}
+#create a date column by reformatting the date to only include years
+#and indicating that it should be treated as numeric data
+datW$year <- as.numeric(format(datW$dateF,"%Y"))
+
+```
+<br>
+Notice again that we used data frame notation to add a new variable, or column, to our data set. You may have figured out that our data set includes daily maximum and minimum temperatures. Average daily temperature is often more helpful to evaluate temperature, let's calculate that before we move on. The average is always halfway between the minimum and maximum. 
+<br>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Create a new variable (column) that contains the average temperature. Name the new variable TAVE",width=70)
+text(800,75, "Question 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+
+
+<br>
+Now we can use the **aggregate** function to calculate means of TAVE for each site. To do this we use the site name as an indexing value. 
+<br>
+```{r echo=TRUE, eval = FALSE}
+#get the mean across all sites
+#the by function is a list of one or more variables to index over.
+#FUN indicates the function we want to use
+#if you want to specify any function specific arguments use a comma and add them after the function
+#here we want to use the na.rm arguments specific to 
+averageTemp <- aggregate(datW$TAVE, by=list(datW$NAME), FUN="mean",na.rm=TRUE)
+averageTemp
+#change the automatic output of column names to be more meaningful
+#note that MAAT is a common abbreviation for Mean Annual Air Temperature
+colnames(averageTemp) <- c("NAME","MAAT")
+averageTemp
+```
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the aggregate and sum functions to get precipitation for each year and site in the data. Why do we need to use the sum function here instead of mean (that we used with temperature)?",width=70)
+text(800,-100, "Question 5:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Now calculate the mean of the annual precipitation for all sites. Compare these values to the mean annual temperatures you calculated earlier. In general terms, describe how the climate varies between sites.",width=70)
+text(800,-100, "Question 6:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
