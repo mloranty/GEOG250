@@ -167,30 +167,36 @@ For the sake of simplicity let's assume that our variable, `tussock`, which indi
 If we assume that the probability (*p*) of tussock occurrence is constant, and that tussocks occur independently of each other then tussock is a *binomial variable* that describes a *binomial process*. Subsequently our data can be described using a binomial distribution, which we can use to find the probability that particular outcomes will occur. We'll not go through the mathematics of these calculations here, but you should know that in order to determine the probability of a *random variable* or particular outcome (e.g. have 25 tussocks) we need to know only the total number of independent trials (*n*) and the equal probability of success (*p*) for each outcome. So in our case we want to know the likelihood of 25 tussocks given *p* = 0.5 and *n* = 101. Here we can use the `dbinom` function in R to compute this probability as follows. 
 
 ```{r message = T,error = T, echo = T}	
-dbinom(25,101,0.5)
+sum(dbinom(0:25,101,0.5))
 ```
 
 In this case the probability that we will have 25 out 101 measurements with tussocks is quite low, which makes sense. Given the probability of 0.5, so our *expected value* or *theoretical mean* would be 101 x 0.5, or 50.5. 
 
 Calculate the probability of having 50 tussocks out of 101 measurements. What is the answer? 
 ```{r message = T,error = T, echo = F, eval = F}	
-dbinom(50,101,0.5)
+# calculate the probability of observing 50 tussocks 
+# in a sample of 101 observations
+# note that we need to sum the probability density
+sum(dbinom(0:50,101,0.5))
 ```
 
 
 We can also use the the `rbinom` to create a random data set with our distribution, and plot this as a histogram. 	
 ```{r, message = T,error = T, echo = T, eval = T}	
+
+#create a histogram for a randomly generated binomial data set
 hist(rbinom(101,101,0.5),breaks = 1:100,	
      xlab = "Tussock Presence",main="")	
 
-
-lines(1:101,dbinom(1:101,101,0.5)*101)
+# add lines to describe the probability density 
+lines(1:101,dbinom(1:101,101,0.5)*101,
+      lwd = 2, lty = "dashed")
 ```
 
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("See if you can modify the code above to create a graph Like the one below that includes sample histograms for *p* = 0.25 and *p* = 0.75. It may help to look at the help for the dbinom and rbinom functions to see what each argument is doing.",width=70)
+a <- strwrap("Modify the code above to create a graph Like the one below that includes sample histograms for p = 0.25 and p = 0.75. It may help to look at the help for the dbinom and rbinom functions to see what each argument is doing. Calculate the probability of observing 25 and 75 tussocks, respectively in a sample size of 101.",width=70)
 text(800,-100, "Code Challenge 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
@@ -235,18 +241,19 @@ h1 <- hist(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],
 		border="white")
 #the seq function generates a sequence of numbers that we can use to plot the normal across the range of temperature values
 x.plot <- seq(-10,30, length.out = 100)
-#the dnorm function will produce the probability density based on a mean and standard deviation.
 
+#the dnorm function will produce the probability density based on a mean and standard deviation.
  y.plot <-  dnorm(seq(-10,30, length.out = 100),
              mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE),
              sd(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE))
+ 
 #create a density that is scaled to fit in the plot  since the density has a different range from the data density.
 #!!! this is helpful for putting multiple things on the same plot
 #!!! It might seem confusing at first. It means the maximum value of the plot is always the same between the two datasets on the plot. Here both plots share zero as a minimum.
  y.scaled <- (max(h1$density)/max(y.plot)) * y.plot
    
 #points function adds points or lines to a graph  
-#the first two arguements are the x coordinates and the y coordinates.
+#the first two arguments are the x coordinates and the y coordinates.
 
 points(x.plot,
        y.scaled, 
@@ -259,20 +266,8 @@ points(x.plot,
 
 You can now see the blue dashed line overlaid on the histogram. This is the normal distribution using the mean and standard deviation calculated from the data. You'll notice the normal distribution does a good job of modeling our data. Sometimes it underestimates a data range and at other points it overestimates it, but overall it mirrors the distribution of our data. This means we can rely on properties of the normal to help describe our data statistically!
 
-<center>
-```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
-par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
-plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("Refer to the histograms that you made in question 4. Does daily average air temperature look like it is normally distributed at all sites?",width=70)
-text(800,-100, "Question 5:", font=2, xpd=T, cex=1.25,adj = c(0,0))
-for(i in 1:length(a)){
-  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
-}
-```
-</center>
 
-
-Now let's revisit how we can use probability think about the occurrence of different air temperature ranges. For a given value of the data, the Normal distribution has a probability density associated with observing the value. The probability density doesn't mean anything at a given value of the data. We can't really do anything with that particular number. However, when the normal distribution is integrated across a range of values, it yields a probability for the occurrence of the range of values. For those of you that haven't had calculus, integrating is essentially taking the area under the curve between a range of numbers. We have to keep in mind that the range of the normal distribution extends from -$\infty$ to $\infty$. Let's start by taking a look at all values below freezing in the normal distribution for our Aberdeen weather data. Technically this is the probability of all temperatures below freezing from zero to -$\infty$. Functionally we know some low temperatures would be impossible to observe on earth and the probability of observing values closer to -$\infty$ will be minuscule. Below is a graphical representation of the area of the curve that describes the probability of observing a daily temperature below zero. 
+Now let's examine how we can use probability think about the occurrence of different air temperature ranges. For a given value of the data, the Normal distribution has a probability density associated with observing the value. The probability density doesn't mean anything at a given value of the data. We can't really do anything with that particular number. However, when the normal distribution is integrated across a range of values, it yields a probability for the occurrence of the range of values. For those of you that haven't had calculus, integrating is essentially taking the area under the curve between a range of numbers. We have to keep in mind that the range of the normal distribution extends from -$\infty$ to $\infty$. Let's start by taking a look at all values below freezing in the normal distribution for our Aberdeen weather data. Technically this is the probability of all temperatures below freezing from zero to -$\infty$. Functionally we know some low temperatures would be impossible to observe on earth and the probability of observing values closer to -$\infty$ will be minuscule. Below is a graphical representation of the area of the curve that describes the probability of observing a daily temperature below zero. 
 
 ```{r echo=FALSE}
 plot(x.plot, y.scaled, type="l",
@@ -287,13 +282,13 @@ polygon(c(x.sub,rev(x.sub)),
 		col="tomato2", border =NA)
 ```
 
-Luckily we don't have to do any of the work calculating the probability. R has a built in suite of functions for working with probability distributions. Below is an image of the documentation for all functions related to the normal distribution.Run the documentation on dnorm to see them all:
+Luckily we don't have to do any of the work calculating the probability. R has a built in suite of functions for working with probability distributions. Below is an image of the documentation for all functions related to the normal distribution. Run the documentation on dnorm to see them all:
 
 ```{r echo=TRUE}
 help(dnorm)
 ```
 
-R uses p to designate probability. Let's calculate the probability of below freezing temperatures.Don't forget that probabilities always range from 0 to 1. We would have to go integrate across -$\infty$ to $\infty$ to get a probability of 1 in the normal. 
+R uses p to designate probability. Let's calculate the probability of below freezing temperatures.Don't forget that probabilities always range from 0 to 1. We would have to integrate across -$\infty$ to $\infty$ to get a probability of 1 in the normal. 
 
 ```{r echo=TRUE}
 #pnorm(value to evaluate at (note this will evaluate for all values and below),mean, standard deviation)
@@ -304,7 +299,7 @@ pnorm(0,
 
 You can see below freezing temperatures are rare at this site and we only expect them to occur about 1% of the time. I can take advantage of the properties of the distribution and add and subtract areas under the curve to better tailor my ranges of numbers. For example, I might be interested in identifying how often a temperatures between 0-5 degrees occur. 
 ```{r echo=TRUE}
-#pnrom with 5 gives me all probability (area of the curve) below 5 
+#pnorm with 5 gives me all probability (area of the curve) below 5 
 pnorm(5,
       mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE),
       sd(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE))
@@ -326,7 +321,7 @@ polygon(c(x.sub,rev(x.sub)),
 However, if I subtract the area below 0 from that number, I will get the probability of temperatures in the range of 0-5.
 
 ```{r echo=TRUE}
-#pnrom with 5 gives me all probability (area of the curve) below 5 
+#pnorm with 5 gives me all probability (area of the curve) below 5 
 pnorm(5,
       mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE),
       sd(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE))- pnorm(0,
@@ -349,7 +344,7 @@ polygon(c(x.sub,rev(x.sub)),
 
 Now let's evaluate the probability of high temperatures. Knowing that the entire distribution adds up to 1, we can also find the area above a value. For example, let's look at the probability of temperatures above 20 degrees C. 
 ```{r echo=TRUE}
-#pnorm of 20 gives me all probability (area of the curve) below 20 
+#pnorm of 20 gives me all probability (area under the curve) below 20 
 #subtracting from one leaves me with the area above 20
 1 - pnorm(20,
       mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE),
@@ -372,38 +367,67 @@ polygon(c(x.sub,rev(x.sub)),
 The qnorm function will return the value associated with a probability. This is the value in which all values at or below the value equal that probability. Let's use this to evaluate extreme weather events. Let's assume everything that occurs with a probability of less than 10% of the time (either hot or cold so anything above 95% or anything below 5%) is unusual. Let's examine what unusually high temperatures in Aberdeen start at: 
 
 ```{r echo=TRUE}
-#pnorm of 20 gives me all probability (area of the curve) below 20 
-#subtracting from one leaves me with the area above 20
+#qnorm tells us what high temperature occurs at 95% 
+#or less than 5% of the time
 qnorm(0.95,
       mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE),
       sd(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE))
 ```
 
+## Homework 3
+
+**Note:** Throughout all of my code examples, you'll notice that I continued to copy and paste the same code for calculating the mean for Aberdeen: ` mean(datW$TAVE[datW$NAME == "ABERDEEN, WA US"],na.rm=TRUE)`. While I did this to help you remember what was going into the function, it gets confusing and messy in long functions. This is a perfect example of why we name variables (with short clear names!) to refer to later on. As this course progresses, we'll continue to work on creating clean code once you get more comfortable with R. 
+
+Submit a Word/PDF document with your written answers, and your R script to Moodle Before class on Tuesday. 
+
+<br>
+
 <center>
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("Assume climate change increases the mean temperature by 4 degrees C in Aberdeen, but the standard deviation stays the same as the current climate. How often do you expect to observe temperatures greater than the current threshold for extreme high temperatures?",width=70)
-text(800,-100, "Question 6:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+a <- strwrap("Create two separate histograms of temperature for the Livermore and Morrisville weather stations that include line plot of the normal distribution based on the mean and standard deviation of the data.Are these data normally distributed?",width=70)
+text(800,-100, "Question 1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
 }
 ```
 </center>
-
-
-**Note:** Throughout all of my code examples, you'll notice that I continued to copy and paste the same code for calculating the mean for site 1: ` mean(datW$TAVE[datW$siteN == 1],na.rm=TRUE)`. While I did this to help you remember what was going into the function, it gets confusing and messy in long functions. This is a perfect example of why we name variables (with short clear names!) to refer to later on. As this course progresses, we'll continue to work on creating clean code once you get more comfortable with R. 
-
-### _Evaluate patterns in precipitation data_
+<br>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Calculate the extreme high (95%) and low (5%) temperature values for Livermore and Morrisville. ",width=70)
+text(800,-100, "Question 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Assume climate change increases the mean temperature by 4 degrees C in Aberdeen, but the standard deviation stays the same as the current climate. Calculate the probability that you expect to observe temperatures greater than the current threshold for extreme high temperatures under these new climate conditions.",width=70)
+text(800,-100, "Question 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br>
 <center>
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
 a <- strwrap("Make a histogram of daily precipitation for Aberdeen. This is an example of a data distribution that is not normal. Look up the exponential, beta, and gamma distribution using an internet search (note wikipedia is actually good for this info). Look at the range of values these distributions can describe. Would any of these distributions describe the shape of the daily precipitation data?",width=70)
-text(800,-100, "Code Challenge 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+text(800,-100, "Question 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
 }
 ```
 </center>
+
 
