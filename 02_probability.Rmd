@@ -3,7 +3,7 @@ title: "Activity 2: Intro to Probability"
 author: "Mike Loranty"
 output: html_document
 ---
-#### _GEOG 250: Research Methods in Geography, Colgate University_## Instructions
+#### _GEOG 250: Research Methods in Geography, Colgate University_
 
 ## Learning objectives
 #### 1. Handling data in R
