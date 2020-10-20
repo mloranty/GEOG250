@@ -7,7 +7,7 @@ output: html_document
 
 ## Learning objectives
 #### 1. Understanding z-scores and sample probabitlities
-#### 2. Testing hypotheses
+#### 2. Testing hypotheses with t-test and ANOVA
 
 
 ```{r warning=FALSE,echo=FALSE, message=FALSE}
@@ -252,15 +252,93 @@ for(i in 1:length(a)){
 </center>
 <br>
 
+As the text book described, we can use an Analysis of Variance (commonly referred to as ANOVA) to test for differences between three or more samples. Stated simply, an ANOVA tests whether 3 or more samples are drawn from different populations by quantifying whether variance between sample groups is greater than the variance within sample groups. Functionally it is very similar to the t-test. To illustrate this, let's perform a t-test and an ANOVA with our thaw depth data. Note the the function for ANOVA is *aov*, and that I am creating objects from each output. It is important to note that your groups variable (*site* in the ) 
+
+```{r, message = T,error = T, echo = T}
+# perform a t-test assuming equal variance
+t1 <- t.test(td~site,
+          data = thaw,
+          var.equal = T,
+          conf.level = 0.05)
+
+# perform an Analysis of Variace with the same data
+t2 <- aov(td~site,
+          data = thaw)
+```
+
+Examine the t-test results. 
+```{r, message = T,error = T, echo = T}
+#examine the results
+t1
+```
+
+Examine the ANOVA results. Note we have to use the *summary* function to see the results, and the *TukeyHSD* function to look at differences between means. 
+```{r, message = T,error = T, echo = T}
+# we have to use the summary function for the ANOVA results
+summary(t2)
+
+# to look a differences between means
+# and related confidence intervals
+# use the TukeyHSD function
+TukeyHSD(t2,
+         conf.level = 0.05)
+
+```
+
+How do these results compare to one another? Do both tests reach the same conclusion? What are the noticeable differences between the outputs? 
 
 
 
+## Homework 4
+
+The following questions will build on some of your code from Homework 2. You should create a new script for this assignment names *hw4_script.R* and save this in your GEOG250 project. You should copy relevant code from HW2 to get started, and be sure to correct any mistakes you made. Submit a Word/PDF document with your written answers, and your R script to Moodle Before class on Tuesday Oct 27th. 
+
+In the text book, the author discusses an example ANOVA that tests whether there are significant differences in precipitation from day to day in New York City. The underlying hypothesis is that air pollution associated with industrial emissions could generate more cloud condensation nuclei, which in turn could lead to more precipitation. The results indicate greater precipitation in Fridays on Saturday that could possible be explained by a time lag in precipitation. 
+
+Most of the climate data we have been working with come from rural locations that do not likely experience diurnal variation in air pollutants throughout the week. To understand the problem better we will analyze day to day variation in precipitation for our data set to see if there are any patterns. 
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Create a day of week variable for our climate data set (should this variable should be a character or factor data type?). Choose two weather stations and perform a separate analysis of variance for each.",width=70)
+text(800,75, "Q1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
 
 
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the TukeyHSD function to determine which days have significantly different precipitation. In a separate document, write a description of your results that includes means and significance values where appropriate.",width=70)
+text(800,75, "Q2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
 
 
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Calculate total monthly precipitation for each site and year and choose one month to analyze. Use the shapiro.test() function to determine whether data for that month are normally distributed at each site. Perform an ANOVA and use the TukeyHSD as in Q1.",width=70)
+text(800,75, "Q3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
 
 
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("In a separate document, write a description of your results that includes which month you chose and why, whether your data are normally distributed, where significant differences exist, and means and significance values where appropriate.",width=70)
+text(800,75, "Q4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
 
 
 
