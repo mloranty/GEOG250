@@ -1,103 +1,215 @@
 ---
-title: "Introduction to R & Data Exploration"
+title: "Introduction to R & Summary Statistics"
 author: "Mike Loranty"
-date: "10/1/2019"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::include_graphics
+library(imager)
+```
+#### _GEOG 250: Research Methods in Geography, Colgate University_
+
+## Learning objectives
+#### 1. Learn to use RStudio Cloud
+#### 2. Introduction to R 
+#### 3. Handling data in R
+
+
+## Introduction to R & RStudio Cloud
+R is a powerful set of tools for manipulating, analyzing, and visualizing data. These tools are open source, which means that they are and always will be free to use, and they are developed by a worldwide community of users. The R programming language is at the core of these tools. Using the R language you can write commands that will tell your computer what you want it to do with your data. While this may seem a bit daunting there are a number of advantages associated with using tools like R to work with data, instead of using spreadsheet programs where you point and click, for example. In particular you can perform complex calculations with large amounts of data very quickly, and more importantly you can save a record of your commands to make everything you do transparent and reproducible. This is very important in science! 
+
+For our class we are going to use RStudio Cloud to access R. RStudio is something we call an Integrated Development Environment, or IDE for short. It is important to remember that R is the programming language and computer platform, you can use R by itself, but you cannot use RStudio without R. RStudio is simply a nicer interface for interacting with R that includes handy features for keeping your work space organized. As you might have guessed, there is a desktop version of RStudio you can install on your computer, or a cloud-based version that we'll be using. Let's get started. 
+
+This semester we will use a shared work space that I've created for our class. Click the link I've shared with you to join our class work space. You should see something like this: 
+
+<br/>
+<center>
+![](images/rsc_start_proj.PNG)
+</center>  
+<br/>
+
+Click the **START** button to create a copy of the project for yourself. It might take a moment to load the project, and then you will see the RStudio IDE. 
+
+<br/>
+<center>
+![](images/rsc_ide.PNG)
+</center>  
+<br/>
+
+There are a few important things to point out here. On the left side of the window you will see the **Console**. This is where we type commands that tell R what to do. In the upper right is the **Environment**. Once we start working with different data it will appear here. In the bottom right is the **Files** window. It only has some basic files associated with our project, but as we add data, scripts, and create graphs they will appear here. Notice in all of these panes there are tabs at the top that allow to see other important things as well. We'll learn more about these a little later. 
+
+## Using R to create and manipulate data
+Let’s get a feel for how R works more. Since R is just like a sophisticated calculator, you can type in numerical operations and will get the calculations as output. Type a few different operations like the one below. Note I’ve included both the code and outputs here for an example.
+
+
+```{r pressure, echo=TRUE}
+# remember that this is a comment that R will ignore
+# it's extremely important to use comments for documenting your code and writing notes
+# let's calculate 6 raised to the 6 power
+6^6
 ```
 
-# 1. Introduction to R
-R is a powerful set of tools for manipulating, analyzing, and visulaizing data. These tools are open source, which means that they are and always will be free to use, and they are developed by a worldwide community of users. The R programming language is at the core of these tools. Using the R language you can write commands that will tell your computer what you want it to do with your data. While this may seem a bit daunting there are a number of advantages associated with using tools like R to work with data, instead of using spreadhseet programs where you point and click, for example. In particular you can perform complex calculatations with large amounts of data very quickly, and more importanly you can save a record of your commands to make everything you do transparent and reproducable. This is very important in science! 
+```{r}
+#234 + 8
+234+8
+```
 
-## 1.1 Scripts
-We can use an R script to keep a record of our calculations and any other things we do with our data in R. A script is essentially a text file with a record all of our commands in it. 
-
-To make a script in RStudio click on File > New File > R Script. 
-
-By default this will open in the upper lefthand corner of RStudio, above the console. It's a good idea to save your script to your folder on the network drive before you start working. Now you can type commands in your script and have a record of what we are doing. Note that commands will not execute after you hit enter, instead your curser will just go to the next line. There are a few ways to execute commands in a script. You can press the `Run` button in the upper right of your script window, press CTRL ENTER - either of these options will execute only the line that your cursor is on. You can highlight multiple lines, and use either of these methods to execute them. Pressing the `Source` button will run every command in your script. 
-
-## 1.2 Using R to create and manipulate data
-In an R script a hashtag `#` tells R to ignore that particular line. This is called commenting, and it is useful for leaving notes for yourself and others in your script. 
-
-Let's begin to explore R using a [set of exercises adapted from the book Hands-On Programing with R.](https://rstudio-education.github.io/hopr/basics.html) This is a good resource and I encourage you to use it. 
-
-```{r, collapse = T}
-# R is just a sophisticated calculator
-1+10
-
-# we can easily create a sequence from 100 to 130
-100:130
+```{r}
+#15-23
+15-23
 ```
 
 Because R is a programming language, we need to learn its syntax in order for the computer to understand us. For example try entering the following two pieces of code.
 
 ```{r,message=F, error=T}
-# if you enter an imcomplete command R will show '+' until you finish it
+# if you enter an incomplete command R will show '+' until you finish it
 5-
   
 # R will give you an error message if it doesn't understand the command you've entered
 3 % 5 
 ```
 
-We can create objects
-```{r,collapse = T}
-# using the assignment symbol '<-' we can create an object the computer will store in memory
-die <- 1:6
 
-# we can do all kinds of math on objects
-d2 <- die - 1
+There’s a few things to pay attention to in the console. The > symbol always indicates a new line of code. The + symbol means your line is continuing. Your results will have numbers in brackets to describe the output. [1] Means I have a vector and my output starts on the first element of my vector (in this case its a vector of one).
 
-die/2
+You can also create **objects** with assigned names. Below is an example where I know I will want to use the number 2446 many times so I will give it a shorter name. R conducts all operations on that number. The <- symbol means you are assigning an **object** a **variable name**.
 
-die*die
+```{r}
+# name my number
+a <- 6234
+# multiply my number by 5
+a*5
 ```
 
-## 1.3  Functions in R
-There are a wide variety of functions available to use in R. Functions generally perform some sort of mathematical operation, and can be fairly sophisticated. Functions are followed by parentheses, and you typically write and *argument* inside the parentheses. For example, imagine that we have a vector of numbers from 1 to 6, and we want to fund the mean of these numbers. It turns out there is a `mean` function, and if we supply our vector as the argument R will calculate the mean of all numbers in the vector.
+```{r}
+# divide my number by 3
+a/3
+```
+
+In data can be stored in a **vector**, which is a sequence of data elements with the same basic type. We will talk about data types more letter, so for now let's just think of data as numbers. R automatically does vector operations, meaning that you can assign two numbers to a variable name and do math operations on them. First you have to let R know you are making a vector of multiple numbers using c(,…,)
+
+
+```{r}
+# make a vector of numbers
+b <- c(2395,82,2947)
+#divide all numbers by 2
+b/2
+```
+
+## Scripts
+We can use an R script to keep a record of our calculations and any other things we do with our data in R. A script is essentially a text file with a record all of our commands in it. In an R script a hashtag `#` tells R to ignore that particular line. This is called **commenting**, and it is useful for leaving notes for yourself and others in your script. In fact, commenting is an important aspect of reproducibility, and **you will be graded on how well your code is commented**.
+
+To make a script in RStudio click on File > New File > R Script. By default this will open in the upper left corner of RStudio, above the console. Before we do anything, save your script you your project directory with the file name **01_intro**. Why do we choose this filename? 
+
+<br/>
+<center>
+![](images/rsc_save.PNG)
+</center>  
+<br/>
+
+Now you can type commands in your script and have a record of what we are doing. Try typing a command - what happens? Note that commands will not execute after you hit enter, instead your cursor will just go to the next line. There are a few ways to execute commands in a script. You can press the `Run` button in the upper right of your script window, press CTRL ENTER - either of these options will execute only the line that your cursor is on. You can highlight multiple lines, and use either of these methods to execute them. Pressing the `Source` button will run every command in your script. 
+
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Practice writing mathematical operations and making vectors using variable names in R. In your script write 3 calculations that use vectors with at least four numbers and a variable name. Run them to make sure they work.",width=70)
+text(800,75, "Code Challenge 1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br/>
+
+## More on working with data in R
+### _Vectors_
+Common types of objects in R include vectors, matrices, and dataframes. Last class, we briefly learned about creating vectors in R. You assign a name to an object using the arrow: **<-** and can make a vector using **c()**. If you remember, R is vectorized so we can automatically apply vector or matrix math to an object. Running the name of an object will print out the object.
+```{r echo=TRUE}
+#make a vector of tree heights in meters
+heights <- c(30,41,20,22)
+#convert to cm
+heights_cm <- heights*100
+heights_cm
+```
+R uses a very specific notation around vectors. It is helpful for subsetting. Anytime you see square brackets **[ ]** recognize that this is subsetting an object in R. Also note that R always counts starting at one (no zeros like other programming languages!). Whenever you see a colon **:**, know that you are indexing through multiple values.
+```{r echo=TRUE}
+#look at the first tree height
+heights[1]
+#look at the 2nd and 3rd tree heights
+heights[2:3]
+```
+### _Matrices_
+I like to think of matrices as essentially multiple columns of vectors in R. You can set up a matrix using the _matrix()_ function. **Functions** are built in to R and will always have parenthesis **()** following the function name. Anything inside of the parentheses is called an **argument**. Here to build a matrix, you need a vector of numbers that fills in the matrix and specify the number of columns or rows. You can also specify how to fill in the matrix (do you go through all columns in each row?). If you ever aren't sure of arguments for a function, you can use _help_ or _?_. 
+
+```{r echo=TRUE}
+#get more info on the matrix function
+help(matrix)
+```
+
+Now, let's make some example matrices. Note the differences in filling in by column vs row.
+```{r echo=TRUE}
+#set up a matrix with 2 columns and fill in by rows
+#first argument is the vector of numbers to fill in the matrix
+Mat<-matrix(c(1,2,3,4,5,6), ncol=2, byrow=TRUE)
+Mat
+#set up a matrix that fills in by columns
+#first argument is the vector of numbers to fill in the matrix
+Mat.bycol<-matrix(c(1,2,3,4,5,6), ncol=2, byrow=FALSE)
+Mat.bycol
+```
+Notice when the both the matrices are run, the output now has square bracket labels with two spots. This notation will always be formatted **[row,column]**. You can use this notation to refer to specific spots in a matrix using the name of the matrix.
+
+```{r echo=TRUE}
+#subset the matrix to look at row 1, column2
+Mat.bycol[1,2]
+
+```
+An opening in a square bracket after or before a comma means refer to all items in that slot. You'll notice the output is a vector when subsetting. 
+
+```{r echo=TRUE}
+#look at all values in row 1
+Mat.bycol[1,]
+#look at all values in column 2
+Mat.bycol[,2]
+```
+
+### _Functions in R_
+There are a wide variety of functions available to use in R. Functions generally perform some sort of mathematical operation, and can be fairly sophisticated. Functions are followed by parentheses, and you typically write and **argument** inside the parentheses. For example, imagine that we have a vector of numbers from 1 to 6, and we want to find the mean of these numbers. It turns out there is a `mean` function, and if we supply our vector as the argument R will calculate the mean of all numbers in the vector.
 
 ```{r, collapse = T}
 mean(1:6)
 
-# We can also use objectes as arguments in a function:
-mean(die)
-
-# We can also nest functions:
-round(mean(die))
 ```
 
-This is convenient, but you may be asking how do I know what functions exist and what the arguments are? For that we can use the help function in R. If you know which function you want to use you can see the documentation in the help window by typing a question mark followed by the function name in the console 
-```{r}
+This is convenient, but you may be asking how do I know what functions exist and what the arguments are? For that we can use the help function in R. If you know which function you want to use you can see the documentation in the help window by typing a question mark followed by the function name in the console.  
+```{r, evaluate = F}
 ?round
 ```
 
-## 1.4 Reading Data into R
-You can read almost any data into R, however in order to do that we need to think a little about file structure and organization on your computer. R is alway pointed to a folder or *working directory*. This is where R will look for files to read, and where it will write new files, unless you specify otherwise. To see where your working directory is you can use the `getwd()` function. 
+### _Reading data from a file_
+Most data that you will work with is too large to be typed into R scripts. A lot of the data will be available in spreadsheet or text file format. You will want to work with this type of data as a dataframe. Dataframes are are matrices where columns have names and rows contain observations for the same entity. This works a lot like a spreadsheet, but we can apply our vector and matrix utilities in R. For example, we will read in a data file for weather data where columns contain data for temperature and precipitation, and each row has an observation for the same day and weather station. You may be used to working with data in excel spreadsheets with a .xlsx extension that is proprietary to Microsoft. This is not ideal to work with, and we will work with **.csv (comma separated values file)**. This file contains the text version of an excel spreadsheet where the values for each cell are included in the file and the designation of a new cell starts with a comma. You can always resave an .xlsx file as a .csv. Let's read in a file. 
 
-```{r, collapse=T}
-getwd()
-```
 
-From here we can use the `setwd()` function to set your working directory. This should typically be a project folder on your computer. 
+To begin, in your file window, click the *New Folder* icon and create a new folder named *data*. Next, click the *upload* button, and then the *Choose File* button, and navigate to the *thaw_depth.csv* file that I sent you.  
 
-```{r,collapse = T, eval=F}
-# I have two lines, depending on which computer I am using
-setwd("Z:/Geog250_F19/loranty/")
+This data file contains measurements of permafrost thaw depth for several field sites in northeastern Siberia. Permafrost is perennially frozen ground that occurs throughout the Arctic and sub-Arctic. During the summer each year the top soil layers thaw, and these measurements quantify the depth of this thawed layer. These measurements can help understand permafrost thaw, which has has important climate change implications
+ 
+<br/>
+<center>
+![](images/permafrost.JPG)
+</center>  
+<br/>
 
-```
-
-Now we can work from this directory. I have a separate *data* folder within my class folder where all of my data files are stored. We can use the `read.csv()` function to read in data files that are in *csv* format. (Note that we can use the `read.table()` function to read other types of files, and there are functions to read excel files too) All of these functions require the the file name as an argument. Here we have to tell R that it is located within the *data* folder in my working directory.
+We can use the `read.csv()` function to read in data files that are in *csv* format. (Note that we can use the `read.table()` function to read other types of files. All of these functions require the the file name as an argument. Here we have to tell R that it is located within the *data* folder in my working directory.
 
 ```{r, message = T,error = T, echo = T}
 thaw <- read.csv("data/thaw_depth.csv")
 ```
 
-We can also specify the entire filepath as the argument.
-```{r, message = T,eval = F}
-thaw <- read.csv("Z:/Geog250_F19/loranty/data/thaw_depth.csv")
-```
 
 Use the help function to find out what additional arguments you might use with the `read.csv` function. 
 
@@ -157,95 +269,192 @@ Here is a list of logical operators in R.
       x|y x or y
       x&y x and y
       
-  
-# 2 Exploratory Data Analysis
+  <center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use matrix notation to calculate the mean thaw depth for each site in our data frame. (Hint use the 'unique' function to find out about sites)",width=70)
+text(800,75, "Code Challenge 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br/>
 
-Now that we're familiar with R we can begin using it to explore our own data. We'll use the *td* object that we created a moment ago. As a reminder, this is a data set we collected in Siberia that contains measurments of permafrost thaw depth. One of the first and most important ways of exploring data is to use *descriptive statistics* that are useful for summarizing data. 
+It is also possible to visualize data in R. This is another important part of the data analyses we will be learning this semester. Let's plot thaw depth values along the transect at the *wws* site. 
 
-## 2.1 Measures of Variability and Central Tendency
-The *mean*, *median*, and *mode* are all measures that describe central values of data. There are functions in the base version of R for each of these. *Mode* is used less frequently, and there is not a basic function in R, so we'll skip this for now. 
-
-```{r, message = T}
-mean(thaw$td)
-median(thaw$td)
+```{r, message = T, eval = T}
+plot(thaw$location[thaw$site=="wws"],thaw$td[thaw$site=="wws"])
 ```
 
-There are also a several important measures that characterize the variability in a data set. The *range* describes the minimum and maximum values, and the *interquartile range* is the difference between the 25th and 75th percentiles, when the data are ranked lowest to highest. 
-```{r,message = T}
-range(thaw$td)
-IQR(thaw$td)
+This is nice, but we need to clean it up a bit by adding axis labels, specifying units, and making things a bit easier to see. 
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the arguments in the plot function to make a graph that looks like the one below.",width=70)
+text(800,75, "Code Challenge 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
 ```
 
-The *variance* describes the average squared deviation of the observations from the mean value, and the *standard deviation* is the square root of the variance. There are also functions for to calculate each of these statistics in R. 
 
-Why do we use the *standard deviation* more often than the *variance*? How can the *standard deviation* be intepreted? 
-
-```{r, message = T}
-# calculate the variance
-var(thaw$td)
-
-# calculate the standard deviation
-sd(thaw$td, na.rm = T)
-
+```{r, echo = F, message = T, eval = T}
+plot(thaw$location[thaw$site=="wws"],-thaw$td[thaw$site=="wws"],
+     ylim = c(-70,0),
+     type = "b", lwd = 2, col = "blue",
+     xlab = "Transect Location (m)",
+     ylab = "Thaw Depth (cm)", 
+     main = "WWS Permafrost Thaw Depth")
 ```
 
-I've added a new argument here in the `sd` function. Use the help to figure out what this means. 
 
-The *coefficient of variation* is another useful measurement. It is a way of relativizing the standard deviation, and is calculated as the ratio of the standard deviation to the mean. Unfortunately there is no function for this in R, but you are now savvy enough to calculate this your self. Calculate a  the *coefficient of variation* using functions and mathematical notation that we've already used. 
-
-# 2.2 Visual Data Description
-While the statistics we calculated above are useful, it is also extremely helpful to visualize the data. Creating a *histogram* is a common way to characterize the statistical distribution of data. A *histogram* shows the frequencies of vaules within a data set. Let's make a histogram of our thaw depth data. 
-
-```{r, message = T}
-hist(thaw$td)
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Calculate the standard deviation, variance, coefficient of variation, and standard error of the mean for the thaw depth at the WWS site. (Hint there may be existing functions to help you, Google is your friend)",width=70)
+text(800,75, "Code Challenge 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
 ```
 
-This is useful, but it looks a bit rough and we should clean it up a bit. At the very least we should add appropriate axis labels and units. 
-
-Use the help and see if you can add a few arguments to make your graph look like the one below (hint - I've added four arguments)
-```{r,message = T, echo = F}
-hist(thaw$td,
-     main="",
-     xlab = "Permafrost Thaw Depth (cm)",
-     col = "gray",
-     freq=F)
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the hist function to create a histogram like the one below for thaw depth at the WWS site. Does this data look normally distributed? ",width=70)
+text(800,75, "Code Challenge 5:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
 ```
 
-Now see if you can use the matrix subsetting and logical statements from above to create a histogram using only data from the site labeled *wws* (Warren's Wingspan)
-
-```{r,message = T, echo = F}
+```{r, echo = F, message = T, eval = T}
 hist(thaw$td[thaw$site=="wws"],
-     main="Thaw Depth at Warren's Wingspan",
-     xlab = "Permafrost Thaw Depth (cm)",
-     col = "gray",
-     freq=F)
+     col = "lightblue",
+     xlab = "Thaw Depth (cm)",
+     main = "WWS Permafrost Thaw Depth")
 ```
 
-The last things we'll do today is make a *boxplot* of the data using the `boxplot()` function. What does this graph show us? 
 
-```{r, message = T}
-boxplot(thaw$td)
+## Homework 2
+
+For this homework we will begin to explore a weather data set that we will use in the coming weeks as we learn about probability. Please answer the following questions. For this homework, you should create a new 'homework2' script in your RStudio Cloud work space. Your script should be well commented, easy to understand, and not contain any extraneous or unnecessary code. For questions requiring a narrative response, record your answers in a separate document that you will submit to Moodle as an MS word or PDF document. 
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Download the 2011124.csv data file from Moodle, load it into the data folder in your RStudio Cloud class workspace, and use the read.csv function to read the data into R using datW as the object name. In the read.csv function, set the stringsAsFactors arguments to true (Hint - use the help to see what this means).",width=70)
+text(800,-100, "Question 1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
 ```
 
-It turns out we can use a *formula* to tell R if it should separate our data into groups. In our case, each site would be a group. Look at the help for the `boxplot` function to understand what is going on here. What does this graph tell us? 
 
-```{r,message = T}
-boxplot(thaw$td~thaw$site)
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Explain the difference between character and factor data types in R (Hint - Google is your friend).",width=70)
+text(800,-100, "Question 2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
 ```
 
-# 3 Homework
 
-For **Homework Assignment 3** you are to use the shrub allometry data set to: 
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("How many rows and columns are in this dataset?",width=70)
+text(800,75, "Question 3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
+<br>
+Before we go any further, we are going to want to change the date format from a factor so it is a little more useful.
+<br>
+```{r echo=FALSE,}
+#specify a column with a proper date format
+#note the format here dataframe$column
+datW <- read.csv("data/2011124.csv", stringsAsFactors = T)
+#google date formatting in r to find more options and learn more
 
-1. Create data subsets for each genus (Alnus, Betula, Salix)
+```
 
-2. For each genus calculate the mean, median, and standard deviation for a variable of your choosing.
+```{r echo=TRUE, , evaluate = FALSE}
+#specify a column with a proper date format
+#note the format here dataframe$column
+datW$dateF <- as.Date(datW$DATE, "%Y-%m-%d")
+#google date formatting in r to find more options and learn more
 
-3. Create a histogram of this variable for each genus. Your histograms should include appropriate axis labels, etc...
+```
+<br>
+We also will find it helpful to have a year column that is numeric for working with the data. You can use the **format** function. This will output a date formatted to just include year in a character data type. Since this data is simply a numeric date, we will indicate that it should actually be numeric using the as.numeric function. Note how R lets you nest functions here.
+<br>
+```{r echo=TRUE, evaluate = FALSE}
+#create a date column by reformatting the date to only include years
+#and indicating that it should be treated as numeric data
+datW$year <- as.numeric(format(datW$dateF,"%Y"))
 
-4. Create a boxplot of your variable showing separate boxes for each genus. 
+```
+<br>
+Notice again that we used data frame notation to add a new variable, or column, to our data set. You may have figured out that our data set includes daily maximum and minimum temperatures. Average daily temperature is often more helpful to evaluate temperature, let's calculate that before we move on. The average is always halfway between the minimum and maximum. 
+<br>
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Create a new variable (column) that contains the average temperature. Name the new variable TAVE",width=70)
+text(800,75, "Question 4:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
 
-5. Write a brief description of your work that includes: 1) an explanation of which variable you chose to summarize and why, 2) a description of what your analyses indicate regarding the similarities/differences between the different shrub genera we studied. 
+
+<br>
+Now we can use the **aggregate** function to calculate means of TAVE for each site. To do this we use the site name as an indexing value. 
+<br>
+```{r echo=TRUE, eval = FALSE}
+#get the mean across all sites
+#the by function is a list of one or more variables to index over.
+#FUN indicates the function we want to use
+#if you want to specify any function specific arguments use a comma and add them after the function
+#here we want to use the na.rm arguments specific to 
+averageTemp <- aggregate(datW$TAVE, by=list(datW$NAME), FUN="mean",na.rm=TRUE)
+averageTemp
+#change the automatic output of column names to be more meaningful
+#note that MAAT is a common abbreviation for Mean Annual Air Temperature
+colnames(averageTemp) <- c("NAME","MAAT")
+averageTemp
+```
+
+<center>
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Use the aggregate and sum functions to get precipitation for each year and site in the data. Why do we need to use the sum function here instead of mean (that we used with temperature)?",width=70)
+text(800,-100, "Question 5:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
 
 
-
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.8}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Now calculate the mean of the annual precipitation for all sites. Compare these values to the mean annual temperatures you calculated earlier. In general terms, describe how the climate varies between sites.",width=70)
+text(800,-100, "Question 6:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,-100+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+</center>
