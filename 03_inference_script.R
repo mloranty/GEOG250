@@ -1,7 +1,7 @@
 # inference code challenge script
 
 # read in the thaw depth data
-thaw <- read.csv("data/thaw_depth.csv")
+thaw <- read.csv("data/thaw_depth.csv", stringsAsFactors = T)
 
 # calculate the mean, sd, and sample size
 x <- mean(thaw$td[thaw$site=="wws"])
