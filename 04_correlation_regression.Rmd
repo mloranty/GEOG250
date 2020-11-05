@@ -1,0 +1,84 @@
+---
+title: "04 Correlation and Regression Analysis"
+author: "Mike Loranty"
+output: html_document
+---
+#### _GEOG 250: Research Methods in Geography, Colgate University_
+
+## Learning objectives
+#### 1. Use correlation and regression to examine relationships between continuous variables
+#### 2. Investigate relationships between air and soil temperatures in Arctic ecosystems
+#### 3. Practice creating plots and interpreting results
+
+
+```{r warning=FALSE,echo=FALSE, message=FALSE}
+library(imager)
+```
+
+This week we will work with some new micrometeorological field data from Siberia to learn how to examine and quantify relationships between variables.
+
+
+Last week we learned to calculate the *covariance* between two variables in order to quantify the linear association between them. More specifically, we use the Pearson's correlation coefficient (*r*) as a means of normalizing the covariance so that it scales from -1 to 1, and can be interpreted as the strength of the relationship between the two variables, or how two variables change in relation to one another. 
+
+Recall that the sample variance $s^{2}$ is calculated as the sum of squared deviations from the mean: 
+
+
+####   $s^{2}$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})}{n-1}$
+
+
+We can compare this to the calculation of the *covariance* and note the similarities: 
+
+####   $cov(x,y)$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})(y_{i}-\overline{y})}{n-1}$
+
+The covariance is simply the product of each variables deviation from its mean, summed over all observations. If you replace *y* with *x* then you have the expanded formula for the variance of x.
+
+This week we extend this process by generating an equation that describes the relationship between the variables of interest. It is important to note that regression analysis assumes a linear relationship between two variables: the *dependent* or *response* variable (*y*), and the *independent* or *explanatory* variable (*x*). Stated plainly, we can use regression analysis to quantify the magnitude of change in our dependent variable (*y*), given a change our independent variable (*x*). For example, how much will leaf mass change in response to an increase in shrub basal area. We should note that we will consider only simple linear regression, which considers two variables, as opposed to a multiple regression that may include more than one *independent* or *explanatory* variable.  
+
+For a linear relationship between two variables, we can use the following equation to represent the best fit line between the data points. You can think of this line as a model capable of predicting values of the *dependent* variable ($\hat{y}$), for a given observation of the *independent* variable (*x*), the *intercept* of the line (*a*), and the *slope* of the line (*b*). 
+
+$\hat{y}$=$a + bx$
+
+
+
+### Assignment 5
+
+This week we are going to branch out a bit and use a different data set that I've described in class [You can view the slides here](https://docs.google.com/presentation/d/1OGsTTLRL5wbQPiU0T7HlSHep1j4Y2KH7UqVgxxLEB3w/edit?usp=sharing) and [download the data here](https://drive.google.com/drive/folders/1g6DVmlYKYe2JC4HZOGz3uAwHBmK8t1hn?usp=sharing): 
+
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Choose data from two sites and write a paragraph describing which data you will analyze and why. Explain your reasoning and indicate which will be your independent variable.",width=70)
+text(800,75, "Q1:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+<br>
+Note that for question 1 you may choose to subset your data by year or season. Similarly may also choose to aggregate your data. If you do this you should describe why in your answer. 
+
+<br>
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Analyze your data to determine whether it meets the assumptions of a linear regression analysis. Describe your results using appropraite graphical and statistical analyses. If your data violate assumptions choose differenct varaibles. ",width=70)
+text(800,75, "Q2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+<br> 
+
+```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
+par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
+plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
+a <- strwrap("Write a paragraph intepreting the results of your regression analyses. Report the appropriate statistics, and create a graph with propr axis labels and that includes the regression line. ",width=70)
+text(800,75, "Q3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
+for(i in 1:length(a)){
+  text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
+}
+```
+
+Note for Questions 2 & 3 you can export your plots as image files. You should do this and paste them in your the writeup you submit. 

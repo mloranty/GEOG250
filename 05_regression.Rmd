@@ -1,58 +1,43 @@
 ---
 title: "05 Regression Analysis"
 author: "Mike Loranty"
-date: "11/12/2019"
 output: html_document
 ---
+#### _GEOG 250: Research Methods in Geography, Colgate University_
+
+## Learning objectives
+#### 1. Use correlation and regression to examine relationships between continuous variables
+#### 2. Investigate relationships between air and soil temperatures in Arctic ecosystems
+#### 3. Practice creating plots and interpreting results
 
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-#knitr::opts_chunk$set(root.dir = "Z:/Geog250_F19/loranty/")
+```{r warning=FALSE,echo=FALSE, message=FALSE}
+library(imager)
 ```
 
-This week we will continue working with our field data from Siberia and learn how examine and quantify relationships between variables.
-
-To begin, let's create a new script, fill in the appropriate header information, and set our working directory.
-```{r,collapse = T, eval=F}
-#####################
-# correlation script
-# GEOG250 F19
-# MML 11/05/19
-#####################
-
-# set working directory to my folder on the server
-setwd("Z:/Geog250_F19/loranty/")
-
-# remember that you should be writing good descriptive comments here - these are your notes!
-
-```
+This week we will work with some new micrometeorological field data from Siberia to learn how to examine and quantify relationships between variables.
 
 
-Last week we learned to calculate the *covariance* between two variables in order to qunatify the linear association between them. More specifically, we use the Pearson's correlation coefficient (*r*) as a means of normalizing the covariance so that it scales from -1 to 1, and can be interpreted as the strength of the relatiohship between the two variables. 
+Last week we learned to calculate the *covariance* between two variables in order to quantify the linear association between them. More specifically, we use the Pearson's correlation coefficient (*r*) as a means of normalizing the covariance so that it scales from -1 to 1, and can be interpreted as the strength of the relationship between the two variables, or how two variables change in relation to one another. 
 
-This week we will extend this process by generating an equation that describes the relationship between the variables of interest. It is important to note that regression analysis assumes a linear relationship between two variables: the *dependent* or *reposnse* variable (*y*), and the *independent* or *explanatory* variable (*x*). Stated plainly, we can use regression analysis to quantify how the magnitude of change in our dependent variable (*y*), given a change our independent variable (*x*). For example, how much will leaf mass change in response to an increase in shrub basal area. We should note that we will consider only simple linear regression, which considers two variables, as opposed to a multiple regression that may include more than one *independent* or *explanatory* variable.  
+Recall that the sample variance $s^{2}$ is calculated as the sum of squared deviations from the mean: 
+
+
+####   $s^{2}$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})}{n-1}$
+
+
+We can compare this to the calculation of the *covariance* and note the similarities: 
+
+####   $cov(x,y)$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})(y_{i}-\overline{y})}{n-1}$
+
+The covariance is simply the product of each variables deviation from its mean, summed over all observations. If you replace *y* with *x* then you have the expanded formula for the variance of x.
+
+This week we extend this process by generating an equation that describes the relationship between the variables of interest. It is important to note that regression analysis assumes a linear relationship between two variables: the *dependent* or *response* variable (*y*), and the *independent* or *explanatory* variable (*x*). Stated plainly, we can use regression analysis to quantify the magnitude of change in our dependent variable (*y*), given a change our independent variable (*x*). For example, how much will leaf mass change in response to an increase in shrub basal area. We should note that we will consider only simple linear regression, which considers two variables, as opposed to a multiple regression that may include more than one *independent* or *explanatory* variable.  
 
 For a linear relationship between two variables, we can use the following equation to represent the best fit line between the data points. You can think of this line as a model capable of predicting values of the *dependent* variable ($\hat{y}$), for a given observation of the *independent* variable (*x*), the *intercept* of the line (*a*), and the *slope* of the line (*b*). 
 
 $\hat{y}$=$a + bx$
 
-We will not delve into the mathematics of regression analysis here, but there are several important points to consider related to regression analysis. To help illustrate this points we can look again at some of our own data. As we did last week, let's read in our shrub allometry data set and create an object names `shr`. 
-
-```{r, message = T,error = T, echo = F}
-shr <- read.csv("data/shrub_allometry.csv")
-
-aln <- shr[shr$species=="aln",]
-```
-Next, subset the data to include only Alder shrubs, and create the following plot. 
-```{r, message = T,error = T, echo = F, fig.width = 6, fig.height = 6}
-plot(aln$diameter,aln$mass,
-     pch = 16,
-     xlab = "Basal Diameter (cm)",
-     ylab = "Leaf Mass (g)")
-```
-
-The first question we ought to consider is whether or not there appears to be a linear relationship between our variables? What do you think? If the answer is yes, then we may proceed, otherwise we could either transform our data to make it linear, or use a non-linear regression. We will not cover non-linear regression this semester, but it is good to know that this is an option that exists. 
 
 If our relationship appears linear, we can go ahead and perform a regression analysis in R using the `lm` function. 
 ```{r, message = T,error = T, echo = T}
