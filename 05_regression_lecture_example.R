@@ -13,6 +13,10 @@ plot(flower$Sepal.Length, flower$Petal.Length,
      main = "Iris virginica", 
      pch = 16, col = "purple")
 
+# let's look at correlation from last week
+cor(flower$Petal.Length,flower$Sepal.Length)
+
+
 # perform a linear regression
 # ordinary least squares regression
 # lm(dependent variable ~ independent variable)
@@ -60,3 +64,8 @@ plot(flower$Sepal.Length, flower$Petal.Length,
 abline(summary(fit)$coefficients[,1],
        lty = "dashed",lwd = 2)
 
+#---------------- Merge Example for Regression HW ----------------#
+mdf1 <- read.csv("data/MDF1_us_met_master.csv")
+ldf2 <- read.csv("data/LDF2_us_met_master.csv")
+
+all <- merge(mdf1,ldf2,by = c("year", "month", "day", "hour", "minute"))
