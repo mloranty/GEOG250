@@ -61,7 +61,7 @@ Luckily for us `R` is a great stats package that has a covariance function for u
 cov(shr$diameter,shr$mass)
 ```
 
-What does this value mean, and how can we intepret it? As you may have guessed, the *covariance* changes with the magnitude of our observations, making it hard to intepret. But it turns out that we can standardize the covariance to range from values of -1 to 1 by dividing by the product of the standard deviations, as follows: 
+What does this value mean, and how can we interpret it? As you may have guessed, the *covariance* changes with the magnitude of our observations, making it hard to interpret. But it turns out that we can standardize the covariance to range from values of -1 to 1 by dividing by the product of the standard deviations, as follows: 
 
 
 ####   $r$=$\frac{\sum_{i=1}^{n}(x_{i}-\overline{x})(y_{i}-\overline{y})}{(n-1)s_{x}s_{y}}$
