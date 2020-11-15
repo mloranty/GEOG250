@@ -62,7 +62,7 @@ Note that for question 1 you may choose to subset your data by year or season. S
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("Analyze your data to determine whether it meets the assumptions of a linear regression analysis. Describe your results using appropraite graphical and statistical analyses. If your data violate assumptions choose differenct varaibles. ",width=70)
+a <- strwrap("Analyze your data to determine whether it meets the assumptions of a linear regression analysis. Describe your results using appropriate graphical and statistical analyses. If your data violate assumptions choose different variables. ",width=70)
 text(800,75, "Q2:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
@@ -74,7 +74,7 @@ for(i in 1:length(a)){
 ```{r echo=FALSE, warning=FALSE,fig.width=8,fig.height=1.5}
 par(bg = rgb(238/255,243/255,250/255), mai=c(0,0,0,6.75))
 plot(load.image("images/Leaf2.PNG"),   axes=FALSE)
-a <- strwrap("Write a paragraph intepreting the results of your regression analyses. Report the appropriate statistics, and create a graph with proper axis labels and that includes the regression line. ",width=70)
+a <- strwrap("Write a paragraph interpreting the results of your regression analyses. Report the appropriate statistics, and create a graph with proper axis labels and that includes the regression line. ",width=70)
 text(800,75, "Q3:", font=2, xpd=T, cex=1.25,adj = c(0,0))
 for(i in 1:length(a)){
   text(800,75+(i*175),paste(a[i]), xpd=T, cex=1.25,adj = c(0,0))
